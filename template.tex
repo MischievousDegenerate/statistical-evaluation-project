@@ -263,6 +263,52 @@ Z_{\beta} &= 6.55 - 1.96 = 4.59
 
 \section{Results}
 
+\subsection{Summary of the collected data}
+
+This section collects the raw counts that the tests below draw on; the corresponding test
+statistics and $p$-values are reported in the individual subsections that follow. Accuracy
+means the number of correct answers divided by the group size $n$, where an answer counts
+as correct when Gemma's letter matches the official key.
+
+Across all $532$ observations Gemma answered $284$ correctly ($53.4\%$). Broken down by how
+each question was presented, it scored $73.1\%$ ($98/134$) on pure-text questions (Type A),
+$63.0\%$ ($80/127$) on the paired questions given as a written text description, $42.5\%$
+($54/127$) on those same paired questions given as a screenshot, and $36.1\%$ ($52/144$) on
+the geometric figure questions that exist only as a screenshot (Type B). These four groups
+partition the $532$ observations and form the inputs to the five one-sided binomial tests
+(the overall accuracy plus the four groups, each tested against $p_0 = 0.25$). The
+text-vs-graph two-proportion $z$-test compares the pure-text group ($98/134$) with the
+geometric-figure group ($52/144$), which pool to $\hat p = 150/278 = 0.540$.
+
+The McNemar test uses the $127$ figure/table questions that were asked both as an image and
+as text. The paired outcomes were:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+ & \textbf{Text right} & \textbf{Text wrong} & \textbf{Total} \\
+\midrule
+\textbf{Image right} & 45 & 9  & 54  \\
+\textbf{Image wrong} & 35 & 38 & 73  \\
+\midrule
+\textbf{Total}       & 80 & 47 & 127 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent so the discordant pairs the test relies on are $b + c = 9 + 35 = 44$, of which
+$9$ favour the image and $35$ favour the text.
+
+For the contamination check the exams are grouped by Gemma's January 2025 training cutoff.
+The $14$ pre-cutoff exams (2017--2024) scored $52.8\%$ ($263/498$), whereas the two exams
+that could not have been in the training data scored higher --- $61.8\%$ ($21/34$) on
+Spring 2025 and $73.5\%$ ($25/34$) on Fall 2025, i.e.\ $67.6\%$ ($46/68$) combined. These
+are the inputs to the one-sided two-proportion $z$-test
+($H_1: p_{\text{pre}} > p_{\text{post}}$).
+
+Finally, the power calculations use the $44$ discordant pairs (McNemar) and the group sizes
+$n_{\text{text}} = 134$ and $n_{\text{graph}} = 144$ (two-proportion $z$-test).
+
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\linewidth]{images/accuracy_by_group.png}
