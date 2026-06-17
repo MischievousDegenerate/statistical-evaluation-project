@@ -155,9 +155,14 @@ Depending on the experimental condition described in Section 2.3, either textual
 Four statistical procedures were used to analyze the results.
 
 \begin{itemize}
-    \item Five one-sided binomial tests were conducted to determine whether Gemma's overall accuracy and accuracy on the different modalities exceeded the 25\% accuracy expected from random guessing on a four-option multiple-choice question. 
+    \item Five one-sided binomial tests were conducted to evaluate whether Gemma’s overall accuracy, as well as its performance across the different input modalities, was significantly greater than the 25\% accuracy expected under random guessing in a four-option multiple-choice setting. These tests provide a statistical framework for determining whether the observed performance reflects meaningful predictive ability rather than chance-level behaviour.
+    
+    In addition to establishing whether the model performs above baseline, the tests allow for a more detailed assessment of performance across modalities, thereby indicating whether certain input representations (e.g., text-only, image-only, or multimodal inputs) are more effectively processed by the model. This helps identify potential strengths or weaknesses in Gemma’s handling of different information types and provides insight into how modality affects its reasoning performance.
+    
     \item McNemar's test was used to compare performance between the screenshot and text-description modalities for Type C questions. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population. We employed the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
+    
     \item A two-proportion z-test was used to assess whether there was a statistically significant difference between Gemma's accuracies on Type A questions, evaluated using text prompts, and Type B questions, evaluated using screenshot prompts. The test is appropriate under the assumptions that the observations are independent and that each trial results in one of two possible outcomes, namely success (correct answer) or failure (incorrect answer).
+    
     \item A two-proportion z-test was also conducted to compare Gemma's accuracy on questions from before and after the model’s knowledge cutoff. This was done to assess potential data contamination, i.e., whether performance differs systematically between the two time periods.
 \end{itemize}
 
