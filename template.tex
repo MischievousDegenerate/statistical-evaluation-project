@@ -88,7 +88,7 @@ The exam questions were categorized according to the modality in which the relev
     
     \item \textbf{Type B -- Image-only informative questions}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram.
     
-    \item \textbf{Type C -- Text-and-image informative questions}: The question contains both textual and visual information, and both modalities are required to answer the question correctly.
+    \item \textbf{Type C -- Text-and-image informative questions}: The question contains information that both can be described as an image and as text.
 \end{itemize}
 
 
@@ -162,37 +162,37 @@ McNemar's test was used to compare performance between the screenshot and text-d
 
 \subsubsection{Binomial tests}
 
-A binomial test is used to check whether Gemma scores above the 25\% accuracy expected by chance on a four-option question. We run it both on the overall accuracy and on the individual input formats, which also shows whether the model does better on some formats than others.
+Five binomial tests were conducted to assess whether Gemma’s accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. One test was performed for the overall accuracy, and four additional tests were conducted for the individual input modality formats. This allows for an assessment of whether performance varies across modalities, indicating potential differences in how effectively the model processes different types of input representations.
 
 The assumptions of a binomial test are 1) The outcomes should be binary, correct/incorrect, 2) Independent trials, the outcome of one trial shouldn't have an effect on the next one, 3) The probability for correct shouldn't change between trials. All of these assumptions are met in this study, and therefore a binomial test is a suitable test to check if the answers from Gemma are better than random guessing.\newline
 \newline
 The null hypothesis $H_0$ for a one-sided binomial test is $p_0=p$, and the alternative hypothesis $H_1$ is $p_0<p$\newline
-The next step is to calculate the p-value. The CDF of a binomial distribution gives the probability of getting at most $k$ successes, where $n$ is the total number of observations and $k$ is the number of successes observed:
+The next step is to calculate the p-value. The CDF of a binomial distribution gives the probability of getting at most $x$ successes out of $n$ draws:
 
-$$F(k) = P(X \le k) = \sum_{i=0}^{k} \binom{n}{i} p_0^{i} (1 - p_0)^{n-i}$$
+$$F(x) = P(X \le x) = \sum_{k=0}^{\lfloor x \rfloor} \binom{n}{k} p_0^{k} (1 - p_0)^{n-k}$$
 
-Because the test is one-sided, we need the probability of getting at least as many correct answers as observed, which is the upper tail. Therefore we have to use this formula for the p-value:
+Because the test is one-sided, we need the probability of getting at least as many correct answers as observed, which is the upper tail. The one-tailed p-value is therefore computed as:
 
-$$P(X \ge k) = 1 - F(k-1)$$
+$$p_{value} = P(X \ge x) = 1 - F(x-1)$$
 
 Since we run five binomial tests all asking the same question, whether Gemma 
 performs above the 25\% chance level, there is a risk that one of them returns 
 a significant result purely by chance. Running $m$ tests each at $\alpha = 0.05$ 
 raises the family-wise false positive rate to approximately $1 - 0.95^m$, so we 
-apply the Bonferroni correction to keep this under control. The correction simply 
+apply the Bonferroni correction to control for this. The correction simply 
 divides the significance threshold by the number of tests in the family:
 
 \[
     \alpha_{\text{Bonf}} = \frac{\alpha}{m} = \frac{0.05}{5} = 0.0125
 \]
 
-This is the significance level we will compare our p-values to in the results section.
+This is the significance level we will compare our p-values to in the results section. Noteworthy, the Bonferroni method greatly reduces false positives (Type I errors) but increases the risk of missing true effects (Type II errors).
 
 \subsubsection{Two-proportion z-test}
 
-The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the pure-text questions (Type A, given as text) with the geometric figure questions (Type B, given as screenshots), to see whether the format changes how well it does. The second is a contamination check: it compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods.
+The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the pure-text questions (Type A, given as text) with the pure-image questions (Type B, given as screenshots), to see whether the format changes how well it does. This is a two-sided test. The second is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
 
-The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is at least five correct and five wrong answers in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test to check if two separate groups of questions have the same accuracy.\newline
+The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is the number of successes and failures must both be at least 10 respectively in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test to check if two separate groups of questions have the same accuracy.\newline
 \newline
 The null hypothesis $H_0$ is that the two groups have the same true accuracy, $p_1 = p_2$, and the alternative hypothesis $H_1$ is that the accuracies are different, $p_1 \neq p_2$.\newline
 The test statistic is the difference between the two observed accuracies divided by its standard error. Since the null hypothesis says the two accuracies are equal, the standard error is found from a pooled accuracy $\hat{p}$, which is the total number of correct answers in both groups divided by the total number of questions in both groups.
@@ -230,7 +230,7 @@ p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
 &\approx 0.17
 \end{align*}
 
-So with this fixed $n$ the test can detect a true accuracy gap of roughly $17$\% or more at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure-text and geometric-figure questions is $0.731 - 0.361 = 0.37$. So a lot higher than the minimum. This means that the z-test is a good test to use in this study, and that it will almost always give the correct result.
+So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure-text and pure-image questions is $0.731 - 0.361 = 0.37$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
 
 \section{Results}
 
