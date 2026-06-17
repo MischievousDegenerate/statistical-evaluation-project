@@ -195,62 +195,20 @@ divides the significance threshold by the number of tests in the family:
 
 This is the significance level we will compare our p-values to in the results section.
 
-\subsubsection{Two-proportion z-test: pure text (Type A) vs. pure image (Type B) questions}
+\subsubsection{Two-proportion z-test}
 
-To get a broader picture of how much modality matters, we also compared Gemma's 
-accuracy on two groups of questions that cannot be directly paired: the 134 pure-text 
-questions (Type A) and the 144 geometric figure questions (Type B) that only exist 
-as screenshots. The results are summarized below.
+The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is at least five correct and five wrong answers in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test to check if two separate groups of questions have the same accuracy.\newline
+\newline
+The null hypothesis $H_0$ is that the two groups have the same true accuracy, $p_1 = p_2$, and the alternative hypothesis $H_1$ is that the accuracies are different, $p_1 \neq p_2$.\newline
+The test statistic is the difference between the two observed accuracies divided by its standard error. Since the null hypothesis says the two accuracies are equal, the standard error is found from a pooled accuracy $\hat{p}$, which is the total number of correct answers in both groups divided by the total number of questions in both groups.
 
-\begin{center}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Group} & \textbf{Correct} & \textbf{Total} & \textbf{Accuracy} \\
-\midrule
-Pure text (Type A)         & 98 & 134 & 73.1\% \\
-Geometric figures (Type B) & 52 & 144 & 36.1\% \\
-\bottomrule
-\end{tabular}
-\end{center}
+$$\hat{p} = \frac{x_1 + x_2}{n_1 + n_2}$$
 
-\vspace{2ex}
+where $x_1$ and $x_2$ are the number of correct answers and $n_1$ and $n_2$ the number of questions in each group. The test statistic is then
 
-The observed difference in accuracy is 37 percentage points, which is large. To test 
-whether this gap is statistically significant, we used a two-proportion $z$-test under 
-the null hypothesis that the two groups have the same true accuracy:
+$$z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$$
 
-\[
-H_0 : p_{\text{text}} = p_{\text{graph}}
-\]
-
-The test statistic is computed by dividing the observed difference by the standard 
-error under $H_0$, using a pooled estimate of accuracy:
-
-\[
-\hat{p}_{\text{pool}} = \frac{98 + 52}{134 + 144} = \frac{150}{278} \approx 0.540
-\]
-
-\[
-z = \frac{\hat{p}_{\text{text}} - \hat{p}_{\text{graph}}}
-         {\sqrt{\hat{p}_{\text{pool}}(1 - \hat{p}_{\text{pool}})
-         \left(\frac{1}{n_{\text{text}}} + \frac{1}{n_{\text{graph}}}\right)}}
-  = \frac{0.731 - 0.361}
-         {\sqrt{0.540 \cdot 0.460 \cdot \left(\frac{1}{134} + \frac{1}{144}\right)}}
-  \approx 6.19
-\]
-
-This gives a $p$-value of approximately $6.1 \times 10^{-10}$, which is far below the 
-significance level of $\alpha = 0.05$. We therefore reject the null hypothesis and 
-conclude that Gemma performs significantly better on pure-text questions than on 
-geometric figure questions.
-
-It is worth noting that this comparison involves two different sets of questions, so 
-question difficulty and topic are partly confounded with the input format. This means 
-we cannot conclude that the image format alone caused the drop --- the figure questions 
-may simply be harder in general. The paired McNemar test, which compares the same 
-questions under both modalities, is better suited to making that causal claim. The 
-z-test nevertheless gives a clear picture of the performance gap between the two 
-question types in practice.
+Under $H_0$ the statistic $z$ follows a standard normal distribution, so the p-value can be found from it and compared to the significance level $\alpha = 0.05$.
 
 \subsubsection{Power}
 
