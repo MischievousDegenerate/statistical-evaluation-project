@@ -248,14 +248,22 @@ question types in practice.
 
 The dataset is fixed: the exams are a closed set, so the number of observations cannot be increased. When the sample size is fixed, computing the power for the effect we actually observed is uninformative -- it is just a restatement of the p-value and always comes out high after a significant result. A more meaningful question is how large a true effect the design is able to detect: the \textit{minimum detectable effect} (MDE), i.e. the smallest true difference in accuracy between the text and image groups that the two-proportion $z$-test would detect at significance level $\alpha = 0.05$ with power $1 - \beta = 0.80$.
 
-Rearranging the two-proportion sample-size formula to solve for the difference $\delta = p_{\text{text}} - p_{\text{graph}}$ at a fixed group size $n$ gives
+We start from the two-proportion sample-size formula, in which $p_1$ and $p_2$ are the true accuracies of the two groups,
 
-$$\delta_{\min} = (Z_{\alpha/2} + Z_{\beta})\sqrt{\frac{p_{\text{text}}(1 - p_{\text{text}}) + p_{\text{graph}}(1 - p_{\text{graph}})}{n}}$$
+$$n = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{(p_1 - p_2)^2}$$
 
-The variance term $p(1-p)$ is largest at $p = 0.5$, so setting $p_{\text{text}} = p_{\text{graph}} = 0.5$ gives the most conservative (largest) MDE and avoids having to assume the accuracies we are testing for. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 134$,
+and rearrange it to make the difference $p_1 - p_2$ the subject. Multiplying both sides by $(p_1 - p_2)^2$ and dividing by $n$,
+
+$$(p_1 - p_2)^2 = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{n}$$
+
+and taking the square root of both sides gives
+
+$$p_1 - p_2 = (Z_{\alpha/2} + Z_{\beta})\sqrt{\frac{p_1(1 - p_1) + p_2(1 - p_2)}{n}}$$
+
+Each term $p(1-p)$ is at most $0.25$ (its maximum, at $p = 0.5$), so the bracket is at most $0.25 + 0.25 = 0.5$. Using this upper bound gives the most conservative (largest) detectable difference and avoids having to assume the accuracies we are testing for. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 134$,
 
 \begin{align*}
-\delta_{\min} &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
+p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
 &= 2.80 \cdot \sqrt{\frac{0.5}{134}} \\
 &= 2.80 \cdot 0.0611 \\
 &\approx 0.17
