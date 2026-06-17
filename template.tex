@@ -211,17 +211,17 @@ Since the dataset is fixed and numbers of questions can't be increased, the mini
 
 We start from the two-proportion sample-size formula, in which $p_1$ and $p_2$ are the true accuracies of the two groups,
 
-$$n = \frac{(Z_{1-\alpha/2} + Z_{1-\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{(p_1 - p_2)^2}$$
+$$n = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{(p_1 - p_2)^2}$$
 
 and rearrange it to isolate the difference $p_1 - p_2$. Multiplying both sides by $(p_1 - p_2)^2$ and dividing by $n$,
 
-$$(p_1 - p_2)^2 = \frac{(Z_{1-\alpha/2} + Z_{1-\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{n}$$
+$$(p_1 - p_2)^2 = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{n}$$
 
 and taking the square root of both sides gives
 
-$$p_1 - p_2 = (Z_{1-\alpha/2} + Z_{1-\beta})\sqrt{\frac{p_1(1 - p_1) + p_2(1 - p_2)}{n}}$$
+$$p_1 - p_2 = (Z_{\alpha/2} + Z_{\beta})\sqrt{\frac{p_1(1 - p_1) + p_2(1 - p_2)}{n}}$$
 
-To find the smallest effect size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{1-\alpha/2} = 1.96$), power $0.80$ (so $Z_{1-\beta} = 0.84$) and the smaller group size $n = 134$,
+To find the smallest effect size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 134$,
 
 \begin{align*}
 p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
