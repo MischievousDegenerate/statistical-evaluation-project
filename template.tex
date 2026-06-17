@@ -246,20 +246,22 @@ question types in practice.
 
 \subsubsection{Power}
 
-Since the dataset is fixed and the number of observations can't be changed. It's important to make sure that the tests have high power. First the power for the two-proportion z-test is calculated using the following formula.
+The dataset is fixed: the exams are a closed set, so the number of observations cannot be increased. When the sample size is fixed, computing the power for the effect we actually observed is uninformative -- it is just a restatement of the p-value and always comes out high after a significant result. A more meaningful question is how large a true effect the design is able to detect: the \textit{minimum detectable effect} (MDE), i.e. the smallest true difference in accuracy between the text and image groups that the two-proportion $z$-test would detect at significance level $\alpha = 0.05$ with power $1 - \beta = 0.80$.
 
-$$n = \frac{(Z_{\alpha/2} + Z_{\beta})^2 [\hat{p}_{\text{text}}(1 - \hat{p}_{\text{text}}) + \hat{p}_{\text{graph}}(1 - \hat{p}_{\text{graph}})]}{(\hat{p}_{\text{text}} - \hat{p}_{\text{graph}})^2}$$
+Rearranging the two-proportion sample-size formula to solve for the difference $\delta = p_{\text{text}} - p_{\text{graph}}$ at a fixed group size $n$ gives
 
-if we choose $\alpha=0.05$, $n=134$, $\hat{p}_{\text{text}}=0.731$, $\hat{p}_{\text{graph}}=0.361$ and then solve for $\beta$ we find $\beta$ to be this
+$$\delta_{\min} = (Z_{\alpha/2} + Z_{\beta})\sqrt{\frac{p_{\text{text}}(1 - p_{\text{text}}) + p_{\text{graph}}(1 - p_{\text{graph}})}{n}}$$
+
+The variance term $p(1-p)$ is largest at $p = 0.5$, so setting $p_{\text{text}} = p_{\text{graph}} = 0.5$ gives the most conservative (largest) MDE and avoids having to assume the accuracies we are testing for. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 134$,
 
 \begin{align*}
-Z_{\beta} &= \sqrt{\frac{134 \cdot (0.731 - 0.361)^2}{0.731(1 - 0.731) + 0.361(1 - 0.361)}} - 1.96 \\
-Z_{\beta} &= \sqrt{\frac{134 \cdot 0.1369}{0.1966 + 0.2307}} - 1.96 \\
-Z_{\beta} &= \sqrt{\frac{18.3446}{0.4273}} - 1.96 \\
-Z_{\beta} &= 6.55 - 1.96 = 4.59
+\delta_{\min} &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
+&= 2.80 \cdot \sqrt{\frac{0.5}{134}} \\
+&= 2.80 \cdot 0.0611 \\
+&\approx 0.17
 \end{align*}
 
-\text{Using the standard normal CDF for } $Z_{\beta}$ = 4.59 we find $\beta$ to be  0.0000022. Power is defined as $1-\beta$ so the power for the z-test is $1-0.0000022 \approx 1$ which means that our study almost always finds a statistical difference between the accuracy for questions with images and the accuracy for questions with text, if there is one.
+So with this fixed sample the test can detect a true accuracy gap of roughly $17$ percentage points or more at least $80\%$ of the time. The gap we actually observe between the pure-text and geometric-figure questions, $0.731 - 0.361 = 0.37$, is more than twice this minimum detectable effect, so the design is comfortably powered to detect a difference of the size seen here.
 
 \section{Results}
 
