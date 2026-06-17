@@ -201,7 +201,7 @@ $$\hat{p} = \frac{x_1 + x_2}{n_1 + n_2}$$
 
 where $x_1$ and $x_2$ are the number of correct answers and $n_1$ and $n_2$ the number of questions in each group. The test statistic is then
 
-$$z = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$$
+$$z_{obs} = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$$
 
 Under $H_0$ the statistic $z$ follows a standard normal distribution, so the p-value can be found from it and compared to the significance level $\alpha = 0.05$.
 
@@ -352,7 +352,7 @@ Under the null hypothesis, the two discordant outcomes are equally likely. In ot
 Since the number of discordant pairs is sufficiently large (\(b+c=44 \geq 25\)), the chi-square approximation without continuity correction can be used. The McNemar test statistic is therefore
 
 \[
-\chi^2
+\chi_{obs}^2
 =
 \frac{(b-c)^2}{b+c}
 =
