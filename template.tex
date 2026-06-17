@@ -162,11 +162,7 @@ McNemar's test was used to compare performance between the screenshot and text-d
 
 \subsubsection{Binomial tests}
 
-\hline
-Five one-sided binomial tests were conducted to evaluate whether Gemma’s overall accuracy, as well as its performance across the different input modalities, was significantly greater than the 25\% accuracy expected under random guessing in a four-option multiple-choice setting. These tests provide a statistical framework for determining whether the observed performance reflects meaningful predictive ability rather than chance-level behaviour.
-    
-In addition to establishing whether the model performs above baseline, the tests allow for a more detailed assessment of performance across modalities, thereby indicating whether certain input representations (e.g., text-only, image-only, or multimodal inputs) are more effectively processed by the model. This helps identify potential strengths or weaknesses in Gemma’s handling of different information types and provides insight into how modality affects its reasoning performance.
-\hline
+A binomial test is used to check whether Gemma scores above the 25\% accuracy expected by chance on a four-option question. We run it both on the overall accuracy and on the individual input formats, which also shows whether the model does better on some formats than others.
 
 The assumptions of a binomial test are 1) The outcomes should be binary, correct/incorrect, 2) Independent trials, the outcome of one trial shouldn't have an effect on the next one, 3) The probability for correct shouldn't change between trials. All of these assumptions are met in this study, and therefore a binomial test is a suitable test to check if the answers from Gemma are better than random guessing.\newline
 \newline
@@ -193,13 +189,8 @@ divides the significance threshold by the number of tests in the family:
 This is the significance level we will compare our p-values to in the results section.
 
 \subsubsection{Two-proportion z-test}
-\hline
-\paragraph{1. two-proportion z-test}
-A two-proportion z-test was used to assess whether there was a statistically significant difference between Gemma's accuracies on Type A questions, evaluated using text prompts, and Type B questions, evaluated using screenshot prompts. The test is appropriate under the assumptions that the observations are independent and that each trial results in one of two possible outcomes, namely success (correct answer) or failure (incorrect answer).
-\hline
-\paragraph{2. two-proportion z-test}
-A two-proportion z-test was also conducted to compare Gemma's accuracy on questions from before and after the model’s knowledge cutoff. This was done to assess potential data contamination, i.e., whether performance differs systematically between the two time periods.
-\hline
+
+The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the pure-text questions (Type A, given as text) with the geometric figure questions (Type B, given as screenshots), to see whether the format changes how well it does. The second is a contamination check: it compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods.
 
 The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is at least five correct and five wrong answers in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test to check if two separate groups of questions have the same accuracy.\newline
 \newline
