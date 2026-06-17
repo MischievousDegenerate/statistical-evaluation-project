@@ -31,7 +31,7 @@
     \texttt{s255797@student.dtu.dk} \\
     \And
     Frederik Naervig Gerlach-Hansen \\
-    KID student \\
+    Artificial Intelligence \& Data \\
     DTU \\
     \texttt{s256931@dtu.dk} \\
 }
@@ -183,7 +183,7 @@ apply the Bonferroni correction to control for this. The correction simply
 divides the significance threshold by the number of tests in the family:
 
 \[
-    \alpha_{\text{Bonf}} = \frac{\alpha}{m} = \frac{0.05}{5} = 0.0125
+    \alpha_{\text{Bonf}} = \frac{\alpha}{m} = \frac{0.05}{5} = 0.01
 \]
 
 This is the significance level we will compare our p-values to in the results section. Noteworthy, the Bonferroni method greatly reduces false positives (Type I errors) but increases the risk of missing true effects (Type II errors).
@@ -192,18 +192,18 @@ This is the significance level we will compare our p-values to in the results se
 
 The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the pure-text questions (Type A, given as text) with the pure-image questions (Type B, given as screenshots), to see whether the format changes how well it does. This is a two-sided test. The second is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
 
-The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is the number of successes and failures must both be at least 10 respectively in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test to check if two separate groups of questions have the same accuracy.\newline
+The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is the number of successes and failures must both be at least 10 respectively in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test.\newline
 \newline
-The null hypothesis $H_0$ is that the two groups have the same true accuracy, $p_1 = p_2$, and the alternative hypothesis $H_1$ is that the accuracies are different, $p_1 \neq p_2$.\newline
-The test statistic is the difference between the two observed accuracies divided by its standard error. Since the null hypothesis says the two accuracies are equal, the standard error is found from a pooled accuracy $\hat{p}$, which is the total number of correct answers in both groups divided by the total number of questions in both groups.
+The null hypothesis $H_0$ for the two-sided test is that the two groups have the same true accuracy, $p_1 = p_2$, and the alternative hypothesis $H_1$ is that the accuracies are different, $p_1 \neq p_2$.\newline
+The test statistic is the difference between the two observed accuracies divided by the pooled standard error. Since the null hypothesis says the two accuracies are equal, the standard error is found from a pooled accuracy $\hat{p}$, which is the total number of correct answers in both groups divided by the total number of questions in both groups.
 
 $$\hat{p} = \frac{x_1 + x_2}{n_1 + n_2}$$
 
-where $x_1$ and $x_2$ are the number of correct answers and $n_1$ and $n_2$ the number of questions in each group. The test statistic is then
+where $x_1$ and $x_2$ are the number of correct answers and $n_1$ and $n_2$ the number of questions in each group. The pooled test statistic is then:
 
 $$z_{obs} = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$$
 
-Under $H_0$ the statistic $z$ follows a standard normal distribution, so the p-value can be found from it and compared to the significance level $\alpha = 0.05$.
+Under $H_0$ the $z$-statistic follows a standard normal distribution, so the p-value can be found from it and compared to the significance level $\alpha = 0.05$.
 
 \subsubsection{Power}
 
