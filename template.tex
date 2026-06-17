@@ -66,7 +66,7 @@ Beyond just measuring how well Gemma scores, we're also interested in what kinds
 \section{Introduction}
 The rapid advancement of generative artificial intelligence has raised important questions regarding its impact on education and assessment. Modern AI systems are increasingly capable of solving complex academic tasks, including multiple-choice examination questions, which has led to concerns about academic integrity and the potential misuse of AI during unsupervised assessments. This can be seen in the "Generative AI use and misuse call for assessment reform in higher education"\supercite{chirikov2026genai} article published in Science. According to this article 9\% of undergrad students admit to using AI to cheat. At the same time, locally deployable models have become widely accessible, making it possible for students to run powerful AI systems directly on their personal computers without relying on cloud-based services. Understanding the capabilities and limitations of such models is therefore becoming increasingly relevant for both educators and students.
 
-Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma on multiple-choice examination sets from the DTU courses Introduction to Machine Learning and Data Mining (02450 and 02451). In particular, the study examines whether the model performs differently when information is presented visually rather than textually\supercite[\S3.3, p.~14]{weidinger2023sociotechnical}. This is done to demonstrate the strengths and weaknesses of open source models, and to find out which questions are more AI-resistant than others.
+Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma on multiple-choice examination sets from the DTU courses Introduction to Machine Learning and Data Mining (02450 and 02451). In particular, the study examines whether the model performs differently when information is presented visually rather than textually. This addresses the multimodal evaluation gap described in Section~3.3 (p.~14) of "Sociotechnical Safety Evaluation of Generative AI Systems"\supercite{weidinger2023sociotechnical}. This is done to demonstrate the strengths and weaknesses of open source models, and to find out which questions are more AI-resistant than others.
 
 To evaluate the model, Gemma was tested on 16 publicly available examination sets spanning the years 2017–2025. Each exam set contains 27 multiple-choice questions, resulting in a total sample size of 432 questions. The model's answers were compared against the official solutions in order to measure its accuracy.
 
@@ -100,12 +100,12 @@ The model used in the project is Gemma 4 E2B. It is an open source language mode
 
 Unlike closed models such as ChatGPT or Claude, Gemma 4 is released under an Apache 2.0 license, meaning it can be downloaded, run locally, and used freely. This was important for the project, since it allowed all experiments to be run on a local machine with full control over the setup, without any API calls and with no concerns about data leaving the local environment.
 
-Running the model locally also made it straightforward to ensure statistical independence between observations, as each question could be sent in a completely fresh session with no shared state between calls\supercite[App.~C.1, p.~17]{due2024evaluation}.\newline
+Running the model locally also made it straightforward to ensure statistical independence between observations, as each question could be sent in a completely fresh session with no shared state between calls. This follows the design used to ensure independence in Appendix~C.1 (p.~17) of "Evaluation of Large Language Models: STEM Education and Gender Stereotypes"\supercite{due2024evaluation}.\newline
 
 The Gemma family consists of models of varying size, ranging from 2 to 31 billion parameters. The 2 billion parameter model (Gemma-4-E2B) was chosen so that the study could be reproduced by anyone with a normal computer. It was run on a desktop PC with 16 GB of VRAM. Of that 16 GB it used roughly 10 GB. A typical student laptop, for example a MacBook Air with 16 GB of unified memory, could therefore run it pretty comfortably.
 \newline
 
-Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination\supercite[\S8.3, p.~56]{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
+Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination, discussed as a key limitation of static benchmarks in Section~8.3 (p.~56) of "Evaluating Large Language Models: A Comprehensive Survey"\supercite{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
 To account for this, we subsequently perform a one-sided two-proportion z-test comparing the success rates on exam sets from before and after January 2025. This test provides evidence as to whether there is a statistically significant difference in performance between the two periods, which may indicate whether the pre-2025 exam material was included in Gemma’s training data.
 
 
@@ -152,7 +152,7 @@ Depending on the experimental condition described in Section 2.3, either textual
 
 \subsection{Statistical methods}
 
-Three different statistical frameworks were used to analyze the results\supercite[slide~18]{das2026slides}.
+Three different statistical frameworks were used to analyze the results, following the statistical-test guidance on slide~18 of the course lecture material\supercite{das2026slides}.
 
 %All reported accuracy estimates are accompanied by 95\% Wilson confidence intervals.
 
@@ -207,7 +207,7 @@ Under $H_0$ the $z$-statistic follows a standard normal distribution, so the p-v
 
 \subsubsection{Power}
 
-Since the dataset is fixed and numbers of questions can't be increased, the minimum effect size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed\supercite[\S3.2, p.~8]{due2024evaluation}.
+Since the dataset is fixed and numbers of questions can't be increased, the minimum effect size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed, following the power analysis in Section~3.2 (p.~8) described by Due et al.\supercite{due2024evaluation}.
 
 We start from the two-proportion sample-size formula, in which $p_1$ and $p_2$ are the true accuracies of the two groups,
 
