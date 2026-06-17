@@ -105,7 +105,7 @@ Running the model locally also made it straightforward to ensure statistical ind
 The Gemma family consists of models of varying size, ranging from 2 to 31 billion parameters. The 2 billion parameter model (Gemma-4-E2B) was chosen so that the study could be reproduced by anyone with a normal computer. It was run on a desktop PC with 16 GB of VRAM. Of that 16 GB it used roughly 10 GB. A typical student laptop, for example a MacBook Air with 16 GB of unified memory, could therefore run it pretty comfortably.
 \newline
 
-Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination, discussed as a key limitation of static benchmarks in Section~8.3 (p.~56) of "Evaluating Large Language Models: A Comprehensive Survey"\supercite{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
+Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination, discussed as a key limitation of benchmarks in Section~8.3 (p.~56) of "Evaluating Large Language Models: A Comprehensive Survey"\supercite{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
 To account for this, we subsequently perform a one-sided two-proportion z-test comparing the success rates on exam sets from before and after January 2025. This test provides evidence as to whether there is a statistically significant difference in performance between the two periods, which may indicate whether the pre-2025 exam material was included in Gemma’s training data.
 
 
@@ -152,7 +152,7 @@ Depending on the experimental condition described in Section 2.3, either textual
 
 \subsection{Statistical methods}
 
-Three different statistical frameworks were used to analyze the results, following the statistical-test guidance on slide~18 of the course lecture material\supercite{das2026slides}.
+Three different statistical frameworks were used to analyze the results.
 
 %All reported accuracy estimates are accompanied by 95\% Wilson confidence intervals.
 
