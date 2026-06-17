@@ -178,9 +178,13 @@ All reported accuracy estimates are accompanied by 95\% Wilson confidence interv
 The assumptions of a binomial test are 1) The outcomes should be binary, correct/incorrect, 2) Independent trials, the outcome of one trial shouldn't have an effect on the next one, 3) The probability for correct shouldn't change between trials. All of these assumptions are met in this study, and therefore a binomial test is a suitable test to check if the answers from Gemma are better than random guessing.\newline
 \newline
 The null hypothesis $H_0$ for a one-sided binomial test is $p_0=p$, and the alternative hypothesis $H_1$ is $p_0<p$\newline
-The next step is to calculate the p-value. This can be done directly using the CDF for a binomial distribution, where n is the total number of observations and k is the number of successes observed.
+The next step is to calculate the p-value. The CDF of a binomial distribution gives the probability of getting at most $k$ successes, where $n$ is the total number of observations and $k$ is the number of successes observed:
 
-$$P(X \ge k) = \sum_{i=k}^{n} \binom{n}{i} p_0^i (1 - p_0)^{n-i}$$
+$$F(k) = P(X \le k) = \sum_{i=0}^{k} \binom{n}{i} p_0^{i} (1 - p_0)^{n-i}$$
+
+Because the test is one-sided, we need the probability of getting at least as many correct answers as observed, which is the upper tail. Since ``at least $k$'' is the complement of ``at most $k-1$'', the p-value is
+
+$$P(X \ge k) = 1 - F(k-1)$$
 
 Since we run five binomial tests all asking the same question, whether Gemma 
 performs above the 25\% chance level, there is a risk that one of them returns 
