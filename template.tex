@@ -157,7 +157,7 @@ Four statistical procedures were used to analyze the results.
 \begin{itemize}
     \item Five one-sided binomial tests were conducted to determine whether Gemma's overall accuracy and accuracy on the different modalities exceeded the 25\% accuracy expected from random guessing on a four-option multiple-choice question.
     \item McNemar's test was used to compare performance between the screenshot and text-description modalities for Type C questions. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population. We employed the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
-    \item Differences in accuracy between questions of Type A and B were assessed using a chi-squared test of independence. Also called a two-proportion z-test.
+    \item A two-proportion z-test was used to assess whether there was a statistically significant difference between Gemma's accuracies on Type A questions, evaluated using text prompts, and Type B questions, evaluated using screenshot prompts. The test is appropriate under the assumptions that the observations are independent and that each trial results in one of two possible outcomes, namely success (correct answer) or failure (incorrect answer).
     \item A two-proportion z-test (chi-squared test) was done between the accuracy before the knowledge cutoff of Gemma 4 and after the knowledge cutoff. This was done to check for data contamination.
 \end{itemize}
 
@@ -246,13 +246,13 @@ question types in practice.
 
 \subsubsection{Power}
 
-The dataset is fixed: the exams are a closed set, so the number of observations cannot be increased. When the sample size is fixed, computing the power for the effect we actually observed is uninformative -- it is just a restatement of the p-value and always comes out high after a significant result. A more meaningful question is how large a true effect the design is able to detect: the \textit{minimum detectable effect} (MDE), i.e. the smallest true difference in accuracy between the text and image groups that the two-proportion $z$-test would detect at significance level $\alpha = 0.05$ with power $1 - \beta = 0.80$.
+Since the dataset is fixed and numbers of questions can't be increased, the minimum effect size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed.
 
 We start from the two-proportion sample-size formula, in which $p_1$ and $p_2$ are the true accuracies of the two groups,
 
 $$n = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{(p_1 - p_2)^2}$$
 
-and rearrange it to make the difference $p_1 - p_2$ the subject. Multiplying both sides by $(p_1 - p_2)^2$ and dividing by $n$,
+and rearrange it to isolate the difference $p_1 - p_2$. Multiplying both sides by $(p_1 - p_2)^2$ and dividing by $n$,
 
 $$(p_1 - p_2)^2 = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{n}$$
 
@@ -260,7 +260,7 @@ and taking the square root of both sides gives
 
 $$p_1 - p_2 = (Z_{\alpha/2} + Z_{\beta})\sqrt{\frac{p_1(1 - p_1) + p_2(1 - p_2)}{n}}$$
 
-Each term $p(1-p)$ is at most $0.25$ (its maximum, at $p = 0.5$), so the bracket is at most $0.25 + 0.25 = 0.5$. Using this upper bound gives the most conservative (largest) detectable difference and avoids having to assume the accuracies we are testing for. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 134$,
+To find the smallest effect size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 134$,
 
 \begin{align*}
 p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
@@ -269,7 +269,7 @@ p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
 &\approx 0.17
 \end{align*}
 
-So with this fixed sample the test can detect a true accuracy gap of roughly $17$ percentage points or more at least $80\%$ of the time. The gap we actually observe between the pure-text and geometric-figure questions, $0.731 - 0.361 = 0.37$, is more than twice this minimum detectable effect, so the design is comfortably powered to detect a difference of the size seen here.
+So with this fixed $n$ the test can detect a true accuracy gap of roughly $17$\% or more at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure-text and geometric-figure questions is $0.731 - 0.361 = 0.37$. So a lot higher than the minimum. This means that the z-test is a good test to use in this study, and that it will almost always give the correct result.
 
 \section{Results}
 
