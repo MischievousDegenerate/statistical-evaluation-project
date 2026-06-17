@@ -194,7 +194,7 @@ The two-proportion z-test is used in two places in this study. The first compare
 
 The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is the number of successes and failures must both be at least 10 respectively in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test.\newline
 \newline
-The null hypothesis $H_0$ for the two-sided test is that the two groups have the same true accuracy, $p_1 = p_2$, and the alternative hypothesis $H_1$ is that the accuracies are different, $p_1 \neq p_2$.\newline
+The null hypothesis $H_0$ for the two-sided test is that the two groups have the same true accuracy, $p_1 = p_2$, and the alternative hypothesis $H_1$ is that the accuracies are different, $p_1 \neq p_2$. For the one-sided contamination check (before vs.\ after the knowledge cutoff) the hypotheses are instead directional, $H_0: p_{before} = p_{after}$ against $H_1: p_{before} > p_{after}$, testing specifically whether the pre-cutoff accuracy is inflated by training-data contamination.\newline
 The test statistic is the difference between the two observed accuracies divided by the pooled standard error. Since the null hypothesis says the two accuracies are equal, the standard error is found from a pooled accuracy $\hat{p}$, which is the total number of correct answers in both groups divided by the total number of questions in both groups.
 
 $$\hat{p} = \frac{x_1 + x_2}{n_1 + n_2}$$
@@ -211,17 +211,17 @@ Since the dataset is fixed and numbers of questions can't be increased, the mini
 
 We start from the two-proportion sample-size formula, in which $p_1$ and $p_2$ are the true accuracies of the two groups,
 
-$$n = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{(p_1 - p_2)^2}$$
+$$n = \frac{(Z_{1-\alpha/2} + Z_{1-\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{(p_1 - p_2)^2}$$
 
 and rearrange it to isolate the difference $p_1 - p_2$. Multiplying both sides by $(p_1 - p_2)^2$ and dividing by $n$,
 
-$$(p_1 - p_2)^2 = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{n}$$
+$$(p_1 - p_2)^2 = \frac{(Z_{1-\alpha/2} + Z_{1-\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{n}$$
 
 and taking the square root of both sides gives
 
-$$p_1 - p_2 = (Z_{\alpha/2} + Z_{\beta})\sqrt{\frac{p_1(1 - p_1) + p_2(1 - p_2)}{n}}$$
+$$p_1 - p_2 = (Z_{1-\alpha/2} + Z_{1-\beta})\sqrt{\frac{p_1(1 - p_1) + p_2(1 - p_2)}{n}}$$
 
-To find the smallest effect size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 134$,
+To find the smallest effect size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{1-\alpha/2} = 1.96$), power $0.80$ (so $Z_{1-\beta} = 0.84$) and the smaller group size $n = 134$,
 
 \begin{align*}
 p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
