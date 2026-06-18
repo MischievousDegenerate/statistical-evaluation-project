@@ -368,63 +368,31 @@ z-test   & Pre-cutoff vs. post-cutoff ($z = -2.31$) & 52.8\% vs. 67.6\% & $0.99$
 
 
 
-\subsection{Binomial tests: is Gemma better than guessing?}
+\subsection{Binomial tests: beating chance and passing the exam}
 
-A natural first question is whether Gemma is actually doing anything meaningful, 
-or just guessing. Since each question has four scoreable options (A--D), random 
-guessing would give an expected accuracy of 25\%. We tested each input format 
-separately using a one-sided binomial test with $H_0: p = 0.25$.
+We ran one-sided binomial tests on each input format against two baselines: the 25\% accuracy expected from guessing among the four options A--D ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Both families of four tests are Bonferroni-corrected.
 
 \begin{center}
-\begin{tabular}{lcc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$-value} \\
+\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Passes?} \\
 \midrule
-Pure text              & 73.1\% & $2.0 \times 10^{-31}$ \\
-Pure screenshot        & 36.1\% & $2.0 \times 10^{-3}$  \\
-Paired text            & 63.0\% & $1.9 \times 10^{-19}$ \\
-Paired screenshot      & 42.5\% & $1.2 \times 10^{-5}$  \\
-
+Pure text         & 73.1\% & $2.0 \times 10^{-31}$ & $4.5 \times 10^{-8}$ & Yes \\
+Pure screenshot   & 36.1\% & $2.0 \times 10^{-3}$  & $> 0.99$             & No  \\
+Paired text       & 63.0\% & $1.9 \times 10^{-19}$ & $1.7 \times 10^{-3}$ & Yes \\
+Paired screenshot & 42.5\% & $1.2 \times 10^{-5}$  & $0.95$               & No  \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \vspace{2ex}
 
-All four $p$-values are well below the Bonferroni-corrected threshold of 
-$\alpha_{\text{Bonf}} = 0.01$, so we can confidently say that Gemma performs 
-above chance in every format. Even on the hardest group, image-only 
-screenshots, the result is statistically significant, meaning the model is 
-extracting some real information from the images rather than just guessing.
-
-\subsection{Binomial tests: can Gemma pass the exam?}
-
-Beyond testing whether Gemma performs above random guessing, a more practically relevant question is whether it would actually \textit{pass} the exam. The passing threshold at DTU is 50\%, so a one-sided binomial test against $H_0: p = 0.50$ was conducted for each input format, applying Bonferroni correction for four tests ($\alpha_\text{Bonf} = 0.0125$).
-
-\begin{center}
-\begin{tabular}{lccc}
-\toprule
-\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$-value} & \textbf{Passes?} \\
-\midrule
-Pure text              & 73.1\% & $4.5 \times 10^{-8}$ & Yes \\
-Pure Screenshot        & 36.1\% & $> 0.99$             & No  \\
-Paired text            & 63.0\% & $1.7 \times 10^{-3}$ & Yes \\
-Paired screenshot      & 42.5\% & $0.95$               & No  \\
-
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{2ex}
-
-The results split cleanly along modality lines. When information is provided as text, Gemma passes comfortably. When visual elements are presented as screenshots, performance falls well below the passing threshold with no statistical evidence of passing.
-
-
-
+Every format beats chance -- all four $p$-values against the 25\% baseline are far below the corrected threshold, so Gemma extracts real information even from the hardest image-only screenshots. Against the 50\% passing threshold the formats split along modality lines: Gemma passes comfortably when the information is text (pure text and paired text descriptions) but falls well short whenever the visual element is shown only as a screenshot.
 
 To simulate a full exam, the same binomial test was used, but instead of Pure text or Pure image, the different modalities were combined. This simulated a full exam since normal exams are combinations of the different modalities.
 
 \begin{center}
+\small
 \begin{tabular}{lccc}
 \toprule
 \textbf{Paired questions presented as} & \textbf{Correct} & \textbf{Accuracy} & \textbf{$p$-value} \\
