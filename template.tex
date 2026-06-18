@@ -196,10 +196,7 @@ $d$
 \end{tabular}
 \end{center}
 
-The diagonal cells ($a$) and ($d$) contain the concordant pairs, where both methods produce the same outcome. These observations provide no evidence of a difference between the methods. Instead, McNemar's test focuses exclusively on the discordant pairs ($b$) and ($c$), which correspond to observations for which the two methods disagree.
-
-Under the null hypothesis,
-
+The diagonal cells ($a$) and ($d$) contain the concordant pairs, where both methods produce the same outcome. These observations provide no evidence of a difference between the methods. Instead, McNemar's test focuses exclusively on the discordant pairs ($b$) and ($c$), which correspond to observations for which the two methods disagree. Under the null hypothesis,
 $$
 H_0 : p = 0.5,
 $$
@@ -207,7 +204,7 @@ $$
 each method is equally likely to be correct among the discordant pairs. Consequently, conditional on the total number of discordant pairs ($n=b+c$), the number of observations in cell ($b$) follows a binomial distribution,
 
 $$
-b \sim \mathrm{Binomial}(n=b+c,; p=0.5).
+b \sim \mathrm{Binomial}(n=b+c, p=0.5).
 $$
 
 For sufficiently large values when ($b+c \ge 25$), the McNemar test statistic
@@ -224,7 +221,11 @@ $$
 
 or the exact McNemar test based on the binomial distribution may be preferred.
 
-A small p-value indicates that the observed imbalance between (b) and (c) is unlikely to have occurred by chance, providing evidence that one method tends to outperform the other on the paired observations.
+Since this report utilizes the chi-squared approximation method the corresponding $p$-value is found as:
+
+$$p_{value} = P(\chi^2 > \chi^2_{obs})$$
+
+A small $p$-value indicates that the observed imbalance between ($b$) and ($c$) is unlikely to have occurred by chance, providing evidence that one method tends to outperform the other on the paired observations.
 
 \subsubsection{Binomial tests}
 
@@ -330,6 +331,35 @@ Fall 2025            & 25  & 34  & 73.5\% \\
 \bottomrule
 \end{tabular}
 \end{center}
+\begin{table}[ht]
+\centering
+\caption{Accuracy by group with 95\% Wilson score confidence intervals (in percentage points).}
+\label{tab:accuracy-ci}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Group} & \textbf{Correct} & $n$ & \textbf{Accuracy} & \textbf{95\% CI} \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Accuracy by input format}} \\
+Overall (all formats)                      & 284 & 532 & 53.4\% & [49.1,\,57.6] \\
+Pure text (Type A)                         &  98 & 134 & 73.1\% & [65.1,\,79.9] \\
+Paired question, text description (Type C) &  80 & 127 & 63.0\% & [54.3,\,70.9] \\
+Paired question, screenshot (Type C)       &  54 & 127 & 42.5\% & [34.3,\,51.2] \\
+Pure image, screenshot only (Type B)       &  52 & 144 & 36.1\% & [28.7,\,44.2] \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Paired questions --- asked both as an image and as text}} \\
+Correct as image and as text &  & 45 &  &  \\
+Correct as image only        &  &  9 &  &  \\
+Correct as text only         &  & 35 &  &  \\
+Wrong both ways              &  & 38 &  &  \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- before vs.\ after January 2025}} \\
+Exams 2017--2024    & 263 & 498 & 52.8\% & [48.4,\,57.2] \\
+Spring 2025         &  21 &  34 & 61.8\% & [45.0,\,76.1] \\
+Fall 2025           &  25 &  34 & 73.5\% & [56.9,\,85.4] \\
+2025 exams combined &  46 &  68 & 67.6\% & [55.8,\,77.6] \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 \subsection{Overview of all statistical tests}
@@ -386,13 +416,56 @@ above chance in every format. Even on the hardest group, image-only
 screenshots, the result is statistically significant, meaning the model is 
 extracting some real information from the images rather than just guessing.
 
+\subsection{Binomial tests: can Gemma pass the exam?}
+
+Beyond testing whether Gemma performs above random guessing, a more practically relevant question is whether it would actually \textit{pass} the exam. The passing threshold at DTU is 50\%, so a one-sided binomial test against $H_0: p = 0.50$ was conducted for each input format, applying Bonferroni correction for four tests ($\alpha_\text{Bonf} = 0.0125$).
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$-value} & \textbf{Passes?} \\
+\midrule
+Pure text              & 73.1\% & $4.5 \times 10^{-8}$ & Yes \\
+Paired text\_desc      & 63.0\% & $1.7 \times 10^{-3}$ & Yes \\
+Paired screenshot      & 42.5\% & $0.95$               & No  \\
+Screenshot only        & 36.1\% & $> 0.99$             & No  \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{2ex}
+
+The results split cleanly along modality lines. When information is provided as text, Gemma passes comfortably. When visual elements are presented as screenshots, performance falls well below the passing threshold with no statistical evidence of passing.
+
+To simulate a realistic full exam, one modality was assigned per question as it would be in practice: Type A questions as text, Type B and Type C questions as screenshots. The results are shown below alongside the best-case scenario where text descriptions are provided for Type C questions instead of screenshots.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Scenario} & \textbf{Correct} & \textbf{Accuracy} & \textbf{$p$-value} \\
+\midrule
+Realistic (screenshots for B and C)       & 204/405 & 50.4\% & $0.44$ \\
+Best case (text descriptions for C)       & 230/405 & 56.8\% & $3.0 \times 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{2ex}
+
+In the realistic scenario Gemma barely exceeds the passing threshold, but the result is not statistically significant ($p = 0.44$). In the best-case scenario, where table questions are provided as text descriptions, Gemma passes with $p = 0.003$. Whether Gemma reliably passes a full exam therefore depends entirely on whether the visual content is made available as text.
+
+
+
+
+
+
 \subsection{McNemar test results}
 
 \begin{center}
 \begin{tabular}{c c c c}
 &
 &
-\multicolumn{2}{c}{\textbf{Text-text}} \\
+\multicolumn{2}{c}{\textbf{Paired text}} \\
 \cline{3-4}
 &
 &
@@ -401,7 +474,7 @@ extracting some real information from the images rather than just guessing.
 \textbf{Failure}
 \\
 \cline{2-4}
-\multirow{}{}{\rotatebox[origin=c]{90}{\textbf{Text-image}}}
+\multirow{}{}{\rotatebox[origin=c]{90}{\textbf{Paired screenshot}}}
 &
 \textbf{Success}
 &
@@ -423,7 +496,7 @@ extracting some real information from the images rather than just guessing.
 \vspace{5ex}
 The contingency table summarizes the paired outcomes for 127 exam questions evaluated using both prompting methods for the Type C question. Both methods correctly answered 45 questions, while both methods incorrectly answered 38 questions.
 
-The off-diagonal cells represent the \textit{discordant pairs}, where the methods disagreed. The text-image method correctly answered 9 questions that the text-text method answered incorrectly, whereas the text-text method correctly answered 35 questions that the text-image method answered incorrectly.
+The paired-image method correctly answered 9 questions that the paired-text method answered incorrectly, whereas the paired-text method correctly answered 35 questions that the paired-image method answered incorrectly.
 
 The total number of discordant pairs is therefore
 \[
