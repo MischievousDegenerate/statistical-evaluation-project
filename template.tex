@@ -457,19 +457,26 @@ When table questions are shown as screenshots, Gemma barely exceeds the passing 
 
 
 
-\subsection{Two-proportion z-test: pure text vs. screenshot figures}
+\subsection{Two-proportion z-tests: modality effect and contamination}
 
-We compared Gemma's accuracy on pure text questions (73.1\%, $n = 134$) against geometric figure questions given as screenshots (36.1\%, $n = 144$). The two-proportion z-test gave $z = 6.19$, $p = 6.1 \times 10^{-10}$, so the 37 percentage point gap is highly significant.
+The two-proportion z-test was used for two comparisons: the pure-text vs.\ pure-image modality gap (two-sided), and the pre- vs.\ post-cutoff contamination check (one-sided).
 
-However, since the two groups consist of different questions, question difficulty is confounded with modality - this comparison cannot tell us whether the image rendering itself causes the gap. That is what the paired McNemar test above addresses.
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Comparison} & \textbf{Accuracies} & \textbf{$z$} & \textbf{$p$} & \textbf{Significant} \\
+\midrule
+Pure text vs. pure image (two-sided) & 73.1\% vs. 36.1\% & $6.19$  & $6.1 \times 10^{-10}$ & Yes \\
+Pre- vs. post-cutoff (one-sided)     & 52.8\% vs. 67.6\% & $-2.31$ & $0.99$                & No  \\
+\bottomrule
+\end{tabular}
+\end{center}
 
+\vspace{2ex}
 
+Gemma was far more accurate on pure text questions (73.1\%, $n = 134$) than on geometric-figure screenshots (36.1\%, $n = 144$), a highly significant 37 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
 
-
-\subsection{Contamination check: does Gemma remember the old exams?}
-
-The one-sided two-proportion z-test comparing pre-cutoff (2017--2024) accuracy against the two 2025 exams gave $z = -2.31$, $p = 0.99$. The result runs opposite to what contamination would predict: Gemma scored 67.6\% on the clean exams versus 52.8\% on the older ones. There is no evidence that training-data memorisation is inflating the results.
-
+For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams. The result runs opposite to what contamination would predict: Gemma scored 67.6\% on the clean exams versus 52.8\% on the older ones, so there is no evidence that training-data memorisation is inflating the results.
 
 
 \section{Discussion}
