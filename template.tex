@@ -14,6 +14,7 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{doi}
 \usepackage{amsmath}
 
@@ -310,7 +311,7 @@ With only 68 post-cutoff questions the check is therefore only well-powered to d
 This section shows the results from the Gemma 4 run through the exam sets. Accuracy is calculated as $n_{correct}/n_{total}$. The results of the statistical tests are shown later in the results section.
 
 
-\begin{table}[ht]
+\begin{table}[H]
 \centering
 \caption{Accuracy by group.}
 \label{tab:accuracy-ci}
@@ -347,13 +348,6 @@ Fall 2025           &  25 &  34 & 73.5\% & [56.9,\,85.4] \\
 \begin{tabular}{llccc}
 \toprule
 \textbf{Test} & \textbf{Comparison} & \textbf{Accuracy} & \textbf{$p$-value} & \textbf{Significant} \\
-\midrule
-\multicolumn{5}{l}{\textit{Binomial tests — is Gemma better than guessing? ($H_0: p = 0.25$, $\alpha_\text{Bonf} = 0.0125$)}} \\
-Binomial & Pure text              & 73.1\% & $2.0 \times 10^{-31}$ & Yes \\
-Binomial & Pure screenshot        & 36.1\% & $2.0 \times 10^{-3}$  & Yes \\
-Binomial & Paired text            & 63.0\% & $1.9 \times 10^{-19}$ & Yes \\
-Binomial & Paired screenshot      & 42.5\% & $1.2 \times 10^{-5}$  & Yes \\
-
 \midrule
 \multicolumn{5}{l}{\textit{McNemar test — does modality matter on the same question? ($\chi^2 = 15.36$, $df = 1$)}} \\
 McNemar  & Screenshot vs. text\_desc (paired) & 42.5\% vs. 63.0\% & $8.9 \times 10^{-5}$ & Yes \\
