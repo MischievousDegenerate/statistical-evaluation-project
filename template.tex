@@ -160,6 +160,72 @@ Three different statistical frameworks were used to analyze the results.
 
 McNemar's test was used to compare performance between the screenshot and text-description modalities for Type C questions. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population. We employed the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
 
+The McNemar test is used to compare two paired methods when the outcome for each observation is binary (e.g., success or failure). Since both methods are applied to the same set of observations, the results are not independent and therefore cannot be analyzed using a standard two-sample proportion test. 
+
+The paired outcomes are summarized in a $2\times2$ contingency table:
+
+\begin{center}
+\begin{tabular}{c c c c}
+&
+&
+\multicolumn{2}{c}{\textbf{Method A}} \\
+\cline{3-4}
+&
+&
+\textbf{Success}
+&
+\textbf{Failure}
+\\
+\cline{2-4}
+\multirow{}{}{\rotatebox[origin=c]{90}{\textbf{Method B}}}
+&
+\textbf{Success}
+&
+$a$
+&
+$b$
+\\
+&
+\textbf{Failure}
+&
+$c$
+&
+$d$
+\\
+\cline{2-4}
+\end{tabular}
+\end{center}
+
+The diagonal cells ($a$) and ($d$) contain the concordant pairs, where both methods produce the same outcome. These observations provide no evidence of a difference between the methods. Instead, McNemar's test focuses exclusively on the discordant pairs ($b$) and ($c$), which correspond to observations for which the two methods disagree.
+
+Under the null hypothesis,
+
+$$
+H_0 : p = 0.5,
+$$
+
+each method is equally likely to be correct among the discordant pairs. Consequently, conditional on the total number of discordant pairs ($n=b+c$), the number of observations in cell ($b$) follows a binomial distribution,
+
+$$
+b \sim \mathrm{Binomial}(n=b+c,; p=0.5).
+$$
+
+For sufficiently large values when ($b+c \ge 25$), the McNemar test statistic
+
+$$
+\chi^2=\frac{(b-c)^2}{b+c}
+$$
+
+approximately follows a chi-squared distribution with one degree of freedom under ($H_0$). For smaller samples, a continuity-corrected version known as Edwards' correction,
+
+$$
+\chi^2=\frac{(|b-c|-1)^2}{b+c},
+$$
+
+or the exact McNemar test based on the binomial distribution may be preferred.
+
+A small p-value indicates that the observed imbalance between (b) and (c) is unlikely to have occurred by chance, providing evidence that one method tends to outperform the other on the paired observations.
+
 \subsubsection{Binomial tests}
 
 Five binomial tests were conducted to assess whether Gemma’s accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. One test was performed for the overall accuracy, and four additional tests were conducted for the individual input modality formats. This allows for an assessment of whether performance varies across modalities, indicating potential differences in how effectively the model processes different types of input representations.
@@ -183,7 +249,7 @@ apply the Bonferroni correction to control for this. The correction simply
 divides the significance threshold by the number of tests in the family:
 
 \[
-    \alpha_{\text{Bonf}} = \frac{\alpha}{m} = \frac{0.05}{5} = 0.01
+    \alpha_{\text{Bonf}} = \frac{\alpha}{m} = \frac{0.05}{4} = 0.0125
 \]
 
 This is the significance level we will compare our p-values to in the results section. Noteworthy, the Bonferroni method greatly reduces false positives (Type I errors) but increases the risk of missing true effects (Type II errors).
@@ -248,7 +314,7 @@ Overall (all formats)                       & 284 & 532 & 53.4\% \\
 Pure text (Type A)                          & 98  & 134 & 73.1\% \\
 Paired question, text description (Type C)        & 80  & 127 & 63.0\% \\
 Paired question, screenshot (Type C)             & 54  & 127 & 42.5\% \\
-Geometric figure, screenshot only (Type B)  & 52  & 144 & 36.1\% \\
+Pure image, screenshot only (Type B)  & 52  & 144 & 36.1\% \\
 \midrule
 \multicolumn{4}{l}{\textit{Paired questions --- asked both as an image and as text}} \\
 Correct as image and as text                & \multicolumn{3}{c}{45} \\
@@ -261,6 +327,30 @@ Exams 2017--2024     & 263 & 498 & 52.8\% \\
 Spring 2025          & 21  & 34  & 61.8\% \\
 Fall 2025            & 25  & 34  & 73.5\% \\
 2025 exams combined  & 46  & 68  & 67.6\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\subsection{Overview of all statistical tests}
+
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Test} & \textbf{Comparison} & \textbf{Accuracy} & \textbf{$p$-value} & \textbf{Significant} \\
+\midrule
+\multicolumn{5}{l}{\textit{Binomial tests — is Gemma better than guessing? ($H_0: p = 0.25$, $\alpha_\text{Bonf} = 0.0125$)}} \\
+Binomial & Pure text              & 73.1\% & $2.0 \times 10^{-31}$ & Yes \\
+Binomial & Paired text\_desc      & 63.0\% & $1.9 \times 10^{-19}$ & Yes \\
+Binomial & Paired screenshot      & 42.5\% & $1.2 \times 10^{-5}$  & Yes \\
+Binomial & Screenshot only        & 36.1\% & $2.0 \times 10^{-3}$  & Yes \\
+\midrule
+\multicolumn{5}{l}{\textit{McNemar test — does modality matter on the same question? ($\chi^2 = 15.36$, $df = 1$)}} \\
+McNemar  & Screenshot vs. text\_desc (paired) & 42.5\% vs. 63.0\% & $8.9 \times 10^{-5}$ & Yes \\
+\midrule
+\multicolumn{5}{l}{\textit{Two-proportion z-tests ($\alpha = 0.05$)}} \\
+z-test   & Pure text vs. Pure image ($z = 6.19$)     & 73.1\% vs. 36.1\% & $6.1 \times 10^{-10}$ & Yes \\
+z-test   & Pre-cutoff vs. post-cutoff ($z = -2.31$) & 52.8\% vs. 67.6\% & $0.99$                & No  \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -291,9 +381,9 @@ Screenshot only (Type B) & 36.1\% & $2.0 \times 10^{-3}$  \\
 \vspace{2ex}
 
 All four $p$-values are well below the Bonferroni-corrected threshold of 
-$\alpha_{\text{Bonf}} = 0.0125$, so we can confidently say that Gemma performs 
-above chance in every format. Even on the hardest group --- geometric figure 
-screenshots --- the result is statistically significant, meaning the model is 
+$\alpha_{\text{Bonf}} = 0.01$, so we can confidently say that Gemma performs 
+above chance in every format. Even on the hardest group, image-only 
+screenshots, the result is statistically significant, meaning the model is 
 extracting some real information from the images rather than just guessing.
 
 \subsection{McNemar test results}
@@ -331,7 +421,7 @@ extracting some real information from the images rather than just guessing.
 \end{center}
 
 \vspace{5ex}
-The contingency table summarizes the paired outcomes for the 127 exam questions evaluated using both prompting methods for the Type C question. The diagonal cells represent cases where both methods produced the same outcome. Specifically, both methods correctly answered 45 questions, while both methods incorrectly answered 38 questions.
+The contingency table summarizes the paired outcomes for 127 exam questions evaluated using both prompting methods for the Type C question. Both methods correctly answered 45 questions, while both methods incorrectly answered 38 questions.
 
 The off-diagonal cells represent the \textit{discordant pairs}, where the methods disagreed. The text-image method correctly answered 9 questions that the text-text method answered incorrectly, whereas the text-text method correctly answered 35 questions that the text-image method answered incorrectly.
 
@@ -370,6 +460,20 @@ p_{value} = P(\chi^2 > \chi^2_{obs}) =8.9 \times 10^{-5}
 \]
 
 Since the $p_{value}$ is considerably smaller than the significance level of \(\alpha = 0.05\), the null hypothesis is rejected. This provides strong evidence that the two prompting methods do not perform equally. Furthermore, the text-text method was correct on 35 of the 44 discordant questions, whereas the text-image method was correct on only 9. Therefore, the results suggest that the text-text prompting method significantly outperformed the text-image prompting method on this dataset.
+
+\subsection{Two-proportion z-test: pure text vs. screenshot figures}
+
+We compared Gemma's accuracy on pure-text questions (73.1\%, $n = 134$) against geometric figure questions given as screenshots (36.1\%, $n = 144$). The two-proportion z-test gave $z = 6.19$, $p = 6.1 \times 10^{-10}$, so the 37 percentage point gap is highly significant.
+
+However, since the two groups consist of different questions, question difficulty is confounded with modality - this comparison cannot tell us whether the image rendering itself causes the gap. That is what the paired McNemar test above addresses.
+
+
+
+
+\subsection{Contamination check: does Gemma remember the old exams?}
+
+The one-sided two-proportion z-test comparing pre-cutoff (2017--2024) accuracy against the two 2025 exams gave $z = -2.31$, $p = 0.99$. The result runs opposite to what contamination would predict: Gemma scored 67.6\% on the clean exams versus 52.8\% on the older ones. There is no evidence that training-data memorisation is inflating the results.
+
 
 
 \section{Discussion}
