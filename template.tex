@@ -299,9 +299,9 @@ p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
 
 So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure text and pure image questions is $0.731 - 0.361 = 0.37$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
 
-The same method gives the minimum detectable effect for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 68$ post-cutoff 2025 questions, so
+The same method was used for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 68$ post-cutoff 2025 questions, so
 $$p_1 - p_2 = (1.645 + 0.84)\sqrt{\frac{0.25 + 0.25}{68}} \approx 0.21.$$
-With only 68 post-cutoff questions the check is therefore only well-powered to detect a large pre-cutoff inflation (about $21$\% or more). The difference actually observed ($52.8\%$ vs.\ $67.6\%$) is smaller than this and runs the opposite way, so the non-significant result should be read with this limited power in mind.
+With only 68 post-cutoff questions the check is therefore only well-powered to detect a large pre-cutoff inflation (about $21$\% or more). The difference actually observed ($52.8\% -67.6\%=15.8\%$) is smaller than this and runs the opposite way, so the non-significant result should be read with this limited power in mind.
 
 \section{Results}
 
