@@ -84,15 +84,15 @@ The dataset employed in this study consists of publicly available examination se
 The exam questions were categorized according to the modality in which the relevant information was presented:
 
 \begin{itemize}
-    \item \textbf{Type A -- Text-only informative questions}: All information required to answer the question is presented as text.
+    \item \textbf{Pure text questions}: All information required to answer the question is presented as text.
     
-    \item \textbf{Type B -- Image-only informative questions}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram.
+    \item \textbf{Pure image questions}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram.
     
-    \item \textbf{Type C -- Text-and-image informative questions}: The question contains information that both can be described as an image and as text.
+    \item \textbf{Paired questions}: The question contains information that both can be described as an image and as text.
 \end{itemize}
 
 
-\small{See appendix for further clarification and examples of each type}\newline
+\small{See appendix for further clarification and examples of each category}\newline
 
 
 \subsection{The Model}
@@ -117,9 +117,9 @@ To account for this, we subsequently perform a one-sided two-proportion z-test c
 
 The objective of the experiment was to evaluate Gemma's ability to answer multiple-choice examination questions presented through different information modalities.
 
-For text-only informative questions (Type A), Gemma received the question text and answer options. For image-only informative questions (Type B), Gemma received the visual element as a screenshot together with the question text and answer options.
+For pure text questions, Gemma received the question text and answer options. For pure image questions, Gemma received the visual element as a screenshot together with the question text and answer options.
 
-For questions containing both textual and visual information (Type C), two different prompt modalities were evaluated:
+For paired questions, two different prompt modalities were evaluated:
 
 \begin{enumerate}
 \item \textbf{Multimodal modality}: Gemma received the original question text, answer options, and a screenshot of the associated visual element.
@@ -130,7 +130,7 @@ For questions containing both textual and visual information (Type C), two diffe
 
 \end{enumerate}
 
-Type A and Type B questions consist of different examination questions and therefore produce independent (unpaired) observations. In contrast, each Type C question was evaluated under both prompt modalities, thus resulting in paired observations, enabling a direct comparison of the two modalities using McNemar's test.
+Pure text and pure image questions consist of different examination questions and therefore produce independent (unpaired) observations. In contrast, each paired question was evaluated under both prompt modalities, thus resulting in paired observations, enabling a direct comparison of the two modalities using McNemar's test.
 
 
 \subsubsection{Prompting Strategy}
@@ -158,7 +158,7 @@ Three different statistical frameworks were used to analyze the results.
 
 \subsubsection{McNemar test}
 
-McNemar's test was used to compare performance between the screenshot and text-description modalities for Type C questions. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population. We employed the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
+McNemar's test was used to compare performance between the screenshot and text-description modalities for paired questions. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population. We employed the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
 
 The McNemar test is used to compare two paired methods when the outcome for each observation is binary (e.g., success or failure). Since both methods are applied to the same set of observations, the results are not independent and therefore cannot be analyzed using a standard two-sample proportion test. 
 
@@ -257,7 +257,7 @@ This is the significance level we will compare our p-values to in the results se
 
 \subsubsection{Two-proportion z-test}
 
-The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the pure-text questions (Type A, given as text) with the pure-image questions (Type B, given as screenshots), to see whether the format changes how well it does. This is a two-sided test. The second is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
+The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the pure text questions (given as text) with the pure image questions (given as screenshots), to see whether the format changes how well it does. This is a two-sided test. The second is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
 
 The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is the number of successes and failures must both be at least 10 respectively in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test.\newline
 \newline
@@ -297,7 +297,7 @@ p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
 &\approx 0.17
 \end{align*}
 
-So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure-text and pure-image questions is $0.731 - 0.361 = 0.37$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
+So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure text and pure image questions is $0.731 - 0.361 = 0.37$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
 
 \section{Results}
 
@@ -312,10 +312,10 @@ This section shows the results from the Gemma 4 run through the exam sets. Accur
 \midrule
 \multicolumn{4}{l}{\textit{Accuracy by input format}} \\
 Overall (all formats)                       & 284 & 532 & 53.4\% \\
-Pure text (Type A)                          & 98  & 134 & 73.1\% \\
-Paired question, text description (Type C)        & 80  & 127 & 63.0\% \\
-Paired question, screenshot (Type C)             & 54  & 127 & 42.5\% \\
-Pure image, screenshot only (Type B)  & 52  & 144 & 36.1\% \\
+Pure text                          & 98  & 134 & 73.1\% \\
+Paired question, text description        & 80  & 127 & 63.0\% \\
+Paired question, screenshot             & 54  & 127 & 42.5\% \\
+Pure image, screenshot only  & 52  & 144 & 36.1\% \\
 \midrule
 \multicolumn{4}{l}{\textit{Paired questions --- asked both as an image and as text}} \\
 Correct as image and as text                & \multicolumn{3}{c}{45} \\
@@ -341,10 +341,10 @@ Fall 2025            & 25  & 34  & 73.5\% \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by input format}} \\
 Overall (all formats)                      & 284 & 532 & 53.4\% & [49.1,\,57.6] \\
-Pure text (Type A)                         &  98 & 134 & 73.1\% & [65.1,\,79.9] \\
-Paired question, text description (Type C) &  80 & 127 & 63.0\% & [54.3,\,70.9] \\
-Paired question, screenshot (Type C)       &  54 & 127 & 42.5\% & [34.3,\,51.2] \\
-Pure image, screenshot only (Type B)       &  52 & 144 & 36.1\% & [28.7,\,44.2] \\
+Pure text                         &  98 & 134 & 73.1\% & [65.1,\,79.9] \\
+Paired question, text description &  80 & 127 & 63.0\% & [54.3,\,70.9] \\
+Paired question, screenshot       &  54 & 127 & 42.5\% & [34.3,\,51.2] \\
+Pure image, screenshot only       &  52 & 144 & 36.1\% & [28.7,\,44.2] \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Paired questions --- asked both as an image and as text}} \\
 Correct as image and as text &  & 45 &  &  \\
@@ -403,7 +403,7 @@ separately using a one-sided binomial test with $H_0: p = 0.25$.
 Pure text              & 73.1\% & $2.0 \times 10^{-31}$ \\
 Paired text\_desc      & 63.0\% & $1.9 \times 10^{-19}$ \\
 Paired screenshot      & 42.5\% & $1.2 \times 10^{-5}$  \\
-Screenshot only (Type B) & 36.1\% & $2.0 \times 10^{-3}$  \\
+Screenshot only & 36.1\% & $2.0 \times 10^{-3}$  \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -437,7 +437,7 @@ Screenshot only        & 36.1\% & $> 0.99$             & No  \\
 
 The results split cleanly along modality lines. When information is provided as text, Gemma passes comfortably. When visual elements are presented as screenshots, performance falls well below the passing threshold with no statistical evidence of passing.
 
-To simulate a realistic full exam, one modality was assigned per question as it would be in practice: Type A questions as text, Type B and Type C questions as screenshots. The results are shown below alongside the best-case scenario where text descriptions are provided for Type C questions instead of screenshots.
+To simulate a realistic full exam, one modality was assigned per question as it would be in practice: pure text questions as text, pure image and paired questions as screenshots. The results are shown below alongside the best-case scenario where text descriptions are provided for paired questions instead of screenshots.
 
 \begin{center}
 \begin{tabular}{lccc}
@@ -494,7 +494,7 @@ In the realistic scenario Gemma barely exceeds the passing threshold, but the re
 \end{center}
 
 \vspace{5ex}
-The contingency table summarizes the paired outcomes for 127 exam questions evaluated using both prompting methods for the Type C question. Both methods correctly answered 45 questions, while both methods incorrectly answered 38 questions.
+The contingency table summarizes the paired outcomes for the 127 paired questions evaluated using both prompting methods. Both methods correctly answered 45 questions, while both methods incorrectly answered 38 questions.
 
 The paired-image method correctly answered 9 questions that the paired-text method answered incorrectly, whereas the paired-text method correctly answered 35 questions that the paired-image method answered incorrectly.
 
@@ -536,7 +536,7 @@ Since the $p_{value}$ is considerably smaller than the significance level of \(\
 
 \subsection{Two-proportion z-test: pure text vs. screenshot figures}
 
-We compared Gemma's accuracy on pure-text questions (73.1\%, $n = 134$) against geometric figure questions given as screenshots (36.1\%, $n = 144$). The two-proportion z-test gave $z = 6.19$, $p = 6.1 \times 10^{-10}$, so the 37 percentage point gap is highly significant.
+We compared Gemma's accuracy on pure text questions (73.1\%, $n = 134$) against geometric figure questions given as screenshots (36.1\%, $n = 144$). The two-proportion z-test gave $z = 6.19$, $p = 6.1 \times 10^{-10}$, so the 37 percentage point gap is highly significant.
 
 However, since the two groups consist of different questions, question difficulty is confounded with modality - this comparison cannot tell us whether the image rendering itself causes the gap. That is what the paired McNemar test above addresses.
 
@@ -568,21 +568,21 @@ overordnet konklusion på vores projekt
 \begin{figure}
     \centering
     \includegraphics[width=0.65\linewidth]{images/Type A.png}
-    \caption{Type A-example}
+    \caption{Pure text example}
     \label{fig:typeA}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{images/Type B.png}
-    \caption{Type B-example}
+    \caption{Pure image example}
     \label{fig:typeB}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.60\linewidth]{images/Type C.png}
-    \caption{Type C-example}
+    \caption{Paired question example}
     \label{fig:typeC}
 \end{figure}
 
