@@ -85,53 +85,40 @@ The dataset employed in this study consists of publicly available examination se
 The exam questions were categorized according to the modality in which the relevant information was presented:
 
 \begin{itemize}
-    \item \textbf{Pure text questions}: All information required to answer the question is presented as text.
+    \item \textbf{Pure questions:}
+    \begin{itemize}
+    \item \textbf{Text}: All information required to answer the question is presented as text.
+    \item \textbf{Image}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram.
+    \end{itemize}
     
-    \item \textbf{Pure image questions}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram.
-    
-    \item \textbf{Paired questions}: The question contains information that both can be described as an image and as text.
+    \item \textbf{Unpure questions}: The question contains information that can both be described as an image and as text.
 \end{itemize}
 
 
-\small{See appendix for further clarification and examples of each category}\newline
-
-
-\subsection{The Model}
-The model used in the project is Gemma 4 E2B. It is an open source language model developed by Google DeepMind. Gemma 4 is a multimodal model capable of processing both textual and visual inputs, making it suitable for the experimental design of this study, which involves both text and image processing. The model was selected due to its strong performance among open-source large language models. In official documentation, Google describes the Gemma family as “the most capable open source models.”\supercite{gemma4modelcard}
-
-Unlike closed models such as ChatGPT or Claude, Gemma 4 is released under an Apache 2.0 license, meaning it can be downloaded, run locally, and used freely. This was important for the project, since it allowed all experiments to be run on a local machine with full control over the setup, without any API calls and with no concerns about data leaving the local environment.
-
-Running the model locally also made it straightforward to ensure statistical independence between observations, as each question could be sent in a completely fresh session with no shared state between calls. This follows the design used to ensure independence in Appendix~C.1 (p.~17) of "Evaluation of Large Language Models: STEM Education and Gender Stereotypes"\supercite{due2024evaluation}.\newline
-
-The Gemma family consists of models of varying size, ranging from 2 to 31 billion parameters. The 2 billion parameter model (Gemma-4-E2B) was chosen so that the study could be reproduced by anyone with a normal computer. It was run on a desktop PC with 16 GB of VRAM. Of that 16 GB it used roughly 10 GB. A typical student laptop, for example a MacBook Air with 16 GB of unified memory, could therefore run it pretty comfortably.
-\newline
-
-Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination, discussed as a key limitation of benchmarks in Section~8.3 (p.~56) of "Evaluating Large Language Models: A Comprehensive Survey"\supercite{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
-To account for this, we subsequently perform a one-sided two-proportion z-test comparing the success rates on exam sets from before and after January 2025. This test provides evidence as to whether there is a statistically significant difference in performance between the two periods, which may indicate whether the pre-2025 exam material was included in Gemma’s training data.
-
-
+\small{See appendix for examples of each question category}\newline
 
 
 
 
 \subsection{The Experimental Setup}
 
-The objective of the experiment was to evaluate Gemma's ability to answer multiple-choice examination questions presented through different information modalities.
+The objective of the experiment was to evaluate Gemma's ability to answer multiple-choice examination questions presented through different information modalities. The four different input modalities are presented below.
 
-For pure text questions, Gemma received the question text and answer options. For pure image questions, Gemma received the visual element as a screenshot together with the question text and answer options.
+\begin{itemize}
+    \item Pure questions:
+    \begin{itemize}
+        \item \textbf{Unpaired text:} Gemma received the information text and answer options.
+        \item \textbf{Unpaired image:} Gemma received the visual element as a screenshot together with the question text and answer options.
+    \end{itemize}
+    \item Unpure question:
+    \begin{itemize}
+        \item \textbf{Paired text}: The visual element was first converted into a detailed textual description using Claude's Fable 5. Gemma then received this generated description together with the original question text and answer options.
+        \item \textbf{Paired image}: Gemma received the original question text, answer options, and a screenshot of the associated visual element.
+    \end{itemize}
+\end{itemize}
 
-For paired questions, two different prompt modalities were evaluated:
 
-\begin{enumerate}
-\item \textbf{Multimodal modality}: Gemma received the original question text, answer options, and a screenshot of the associated visual element.
-
-
-\item \textbf{Text-description modality}: The visual element was first converted into a detailed textual description using Claude's Fable 5. Gemma then received this generated description together with the original question text and answer options.
-
-
-\end{enumerate}
-
-Pure text and pure image questions consist of different examination questions and therefore produce independent (unpaired) observations. In contrast, each paired question was evaluated under both prompt modalities, thus resulting in paired observations, enabling a direct comparison of the two modalities using McNemar's test.
+Pure examination questions can be considered independent, as each question is evaluated separately and does not share observations with other questions. Consequently, they produce unpaired (independent) observations. In contrast, the unpure question is evaluated under both prompt modalities, resulting in paired observations. This pairing allows for a direct comparison between modalities using McNemar’s test as further explained in section 2.4.1.
 
 
 \subsubsection{Prompting Strategy}
@@ -149,6 +136,20 @@ The prompt provided to Gemma was:
 \end{quote}
 
 Depending on the experimental condition described in Section 2.3, either textual content or visual information was appended to this prompt before being submitted to Gemma.
+
+\subsection{The Model}
+The model used in the project is Gemma 4 E2B. It is an open source language model developed by Google DeepMind. Gemma 4 is a multimodal model capable of processing both textual and visual inputs, making it suitable for the experimental design of this study, which involves both text and image processing. The model was selected due to its strong performance among open-source large language models. In official documentation, Google describes the Gemma family as “the most capable open source models.”\supercite{gemma4modelcard}
+
+Unlike closed models such as ChatGPT or Claude, Gemma 4 is released under an Apache 2.0 license, meaning it can be downloaded, run locally, and used freely. This was important for the project, since it allowed all experiments to be run on a local machine with full control over the setup, without any API calls and with no concerns about data leaving the local environment.
+
+Running the model locally also made it straightforward to ensure statistical independence between observations, as each question could be sent in a completely fresh session with no shared state between calls. This follows the design used to ensure independence in Appendix~C.1 (p.~17) of "Evaluation of Large Language Models: STEM Education and Gender Stereotypes"\supercite{due2024evaluation}.\newline
+
+The Gemma family consists of models of varying size, ranging from 2 to 31 billion parameters. The 2 billion parameter model (Gemma-4-E2B) was chosen so that the study could be reproduced by anyone with a normal computer. It was run on a desktop PC with 16 GB of VRAM. Of that 16 GB it used roughly 10 GB. A typical student laptop, for example a MacBook Air with 16 GB of unified memory, could therefore run it pretty comfortably.
+\newline
+
+Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination, discussed as a key limitation of benchmarks in Section~8.3 (p.~56) of "Evaluating Large Language Models: A Comprehensive Survey"\supercite{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
+To account for this, we subsequently perform a one-sided two-proportion z-test comparing the success rates on exam sets from before and after January 2025. This test provides evidence as to whether there is a statistically significant difference in performance between the two periods, which may indicate whether the pre-2025 exam material was included in Gemma’s training data.
+
 
 
 \subsection{Statistical methods}
@@ -230,12 +231,14 @@ A small $p$-value indicates that the observed imbalance between ($b$) and ($c$) 
 
 \subsubsection{Binomial tests}
 
-Ten binomial tests were conducted in this study. 4 to assess whether Gemma’s accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. 6 to assess whether 
+Ten binomial tests were conducted in this study. 4 to assess whether Gemma’s accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. 4 to assess whether Gemma could pass the exam i.e. a binomial test to see whether Gemma's accuracy exceeded 50\% for each modality. \newline 
+The last 2 tests were full-exam simulations to see if Gemma could pass a realistic exam containing both text and image questions. The first one was a combination of Pure text, Pure image and the paired questions as text. The second one was a combination of Pure text, Pure image and the paired questions as a screenshot.\newline
+all of these were one-sided tests since the purpose was to see how much better Gemma was than the baseline.
 
 The assumptions of a binomial test are 1) The outcomes should be binary, correct/incorrect, 2) Independent trials, the outcome of one trial shouldn't have an effect on the next one, 3) The probability for correct shouldn't change between trials. All of these assumptions are met in this study, and therefore a binomial test is a suitable test to check if the answers from Gemma are better than random guessing.\newline
 \newline
 The null hypothesis $H_0$ for a one-sided binomial test is $p_0=p$, and the alternative hypothesis $H_1$ is $p_0<p$\newline
-The next step is to calculate the p-value. The CDF of a binomial distribution gives the probability of getting at most $x$ successes out of $n$ draws:
+The next step is to calculate the $p$-value. The CDF of a binomial distribution gives the probability of getting at most $x$ successes out of $n$ draws:
 
 $$F(x) = P(X \le x) = \sum_{k=0}^{\lfloor x \rfloor} \binom{n}{k} p_0^{k} (1 - p_0)^{n-k}$$
 
@@ -308,12 +311,12 @@ With only 68 post-cutoff questions the check is therefore only well-powered to d
 
 \subsection{Summary of the data}
 
-This section shows the results from the Gemma 4 run through the exam sets. Accuracy is calculated as $n_{correct}/n_{total}$. The results of the statistical tests are shown later in the results section.
+
 
 
 \begin{table}[H]
 \centering
-\caption{Accuracy by group.}
+\caption{This table shows the results from the Gemma 4 run through the exam sets. Accuracy is calculated as $n_{correct}/n_{total}$.}
 \label{tab:accuracy-ci}
 \begin{tabular}{lrrrr}
 \toprule
@@ -321,16 +324,10 @@ This section shows the results from the Gemma 4 run through the exam sets. Accur
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by input format}} \\
 Overall (all formats)             & 284 & 532 & 53.4\% & [49.1,\,57.6] \\
-Pure text                         &  98 & 134 & 73.1\% & [65.1,\,79.9] \\
-Pure screenshot                   &  52 & 144 & 36.1\% & [28.7,\,44.2] \\
+Unpaired text                         &  98 & 134 & 73.1\% & [65.1,\,79.9] \\
+Unpaired image                   &  52 & 144 & 36.1\% & [28.7,\,44.2] \\
 Paired text &  80 & 127 & 63.0\% & [54.3,\,70.9] \\
-Paired screenshot       &  54 & 127 & 42.5\% & [34.3,\,51.2] \\
-\midrule
-\multicolumn{5}{@{}l}{\textit{Paired questions}} \\
-Correct as image and as text &  & 45 &  &  \\
-Correct as image only        &  &  9 &  &  \\
-Correct as text only         &  & 35 &  &  \\
-Wrong both ways              &  & 38 &  &  \\
+Paired image       &  54 & 127 & 42.5\% & [34.3,\,51.2] \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- before vs.\ after January 2025}} \\
 Exams 2017--2024    & 263 & 498 & 52.8\% & [48.4,\,57.2] \\
@@ -340,70 +337,6 @@ Fall 2025           &  25 &  34 & 73.5\% & [56.9,\,85.4] \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-
-\subsection{Overview of all statistical tests}
-
-\begin{center}
-\begin{tabular}{llccc}
-\toprule
-\textbf{Test} & \textbf{Comparison} & \textbf{Accuracy} & \textbf{$p$-value} & \textbf{Significant} \\
-\midrule
-\multicolumn{5}{l}{\textit{McNemar test — does modality matter on the same question? ($\chi^2 = 15.36$, $df = 1$)}} \\
-McNemar  & Screenshot vs. text\_desc (paired) & 42.5\% vs. 63.0\% & $8.9 \times 10^{-5}$ & Yes \\
-\midrule
-\multicolumn{5}{l}{\textit{Two-proportion z-tests ($\alpha = 0.05$)}} \\
-z-test   & Pure text vs. Pure image ($z = 6.19$)     & 73.1\% vs. 36.1\% & $6.1 \times 10^{-10}$ & Yes \\
-z-test   & Pre-cutoff vs. post-cutoff ($z = -2.31$) & 52.8\% vs. 67.6\% & $0.99$                & No  \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-
-
-
-\subsection{Binomial tests: beating chance and passing the exam}
-
-One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing among the four options A--D ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Both families of four tests are Bonferroni-corrected.
-
-\begin{center}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Passes?} \\
-\midrule
-Pure text         & 73.1\% & $2.0 \times 10^{-31}$ & $4.5 \times 10^{-8}$ & Yes \\
-Pure screenshot   & 36.1\% & $2.0 \times 10^{-3}$  & $> 0.99$             & No  \\
-Paired text       & 63.0\% & $1.9 \times 10^{-19}$ & $1.7 \times 10^{-3}$ & Yes \\
-Paired screenshot & 42.5\% & $1.2 \times 10^{-5}$  & $0.95$               & No  \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{2ex}
-
-Every format beats chance -- all four $p$-values against the 25\% baseline are far below the corrected threshold, so Gemma extracts real information even from the hardest image-only screenshots. Against the 50\% passing threshold the formats split along modality lines: Gemma passes comfortably when the information is text (pure text and paired text descriptions) but falls well short whenever the visual element is shown only as a screenshot.
-
-To simulate a full exam, the same binomial test was used, but instead of Pure text or Pure image, the different modalities were combined. This simulated a full exam since normal exams are combinations of the different modalities.
-
-\begin{center}
-\small
-\begin{tabular}{lccc}
-\toprule
-\textbf{Paired questions presented as} & \textbf{Correct} & \textbf{Accuracy} & \textbf{$p$-value} \\
-\midrule
-Screenshot        & 204/405 & 50.4\% & $0.44$ \\
-Text description  & 230/405 & 56.8\% & $3.0 \times 10^{-3}$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{2ex}
-
-When table questions are shown as screenshots, Gemma barely exceeds the passing threshold but the result is not statistically significant ($p = 0.44$). When tables are written out as text descriptions instead, Gemma passes with $p = 0.003$. The difference between passing and failing a full exam comes down to how the table questions are presented.
-
-
-
-
 
 \subsection{McNemar test results}
 
@@ -420,7 +353,7 @@ When table questions are shown as screenshots, Gemma barely exceeds the passing 
 \textbf{Failure}
 \\
 \cline{2-4}
-\multirow{}{}{\rotatebox[origin=c]{90}{\textbf{Paired screenshot}}}
+\multirow{}{}{\rotatebox[origin=c]{90}{\textbf{Paired image}}}
 &
 \textbf{Success}
 &
@@ -479,6 +412,50 @@ p_{value} = P(\chi^2 > \chi^2_{obs}) =8.9 \times 10^{-5}
 \]
 
 Since the $p_{value}$ is considerably smaller than the significance level of \(\alpha = 0.05\), the null hypothesis is rejected. This provides strong evidence that the two prompting methods do not perform equally. Furthermore, the text-text method was correct on 35 of the 44 discordant questions, whereas the text-image method was correct on only 9. Therefore, the results suggest that the text-text prompting method significantly outperformed the text-image prompting method on this dataset.
+
+
+\subsection{Binomial tests: beating chance and passing the exam}
+
+One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). All tests were compared to the bonferroni correct $\alpha_{\text{Bonf}}=0.0125$
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Pass} \\
+\midrule
+Unpaired text         & 73.1\% & $2.0 \times 10^{-31}$ & $4.5 \times 10^{-8}$ & Yes \\
+Unpaired image   & 36.1\% & $2.0 \times 10^{-3}$  & $> 0.99$             & No  \\
+Paired text       & 63.0\% & $1.9 \times 10^{-19}$ & $1.7 \times 10^{-3}$ & Yes \\
+Paired image & 42.5\% & $1.2 \times 10^{-5}$  & $0.95$               & No  \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{2ex}
+
+Every modality beats chance, all four $p$-values against the 25\% baseline are far below the corrected threshold. Against the 50\% passing threshold the formats split along modalities. Gemma passes when the information is text (pure text and paired text descriptions) but fails when the questions are presented as a screenshot.
+
+To simulate a full exam, the same binomial test was used, but instead of Pure text or Pure image, the different modalities were combined. This simulated a full exam since normal exams are combinations of the different modalities.
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Pass} \\
+\midrule
+Paired image  & 50.4\% & $5.6 \times 10^{-28}$ & $0.44$               & No  \\
+Paired text   & 56.8\% & $4.8 \times 10^{-42}$ & $3.0 \times 10^{-3}$ & Yes \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{2ex}
+
+When table questions are shown as screenshots, Gemma barely exceeds the passing threshold but the result is not statistically significant ($p = 0.44$). When tables are written out as text descriptions instead, Gemma passes with $p = 0.003$.
+
+
+
+
+
 
 \subsection{Two-proportion z-test: pure text vs. screenshot figures}
 
