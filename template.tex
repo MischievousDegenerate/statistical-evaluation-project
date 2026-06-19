@@ -118,7 +118,7 @@ The objective of the experiment was to evaluate Gemma's ability to answer multip
 
 Unpaired examination questions can be considered independent, as each question is evaluated separately and does not share observations with other questions. Consequently, they produce unpaired (independent) observations. In contrast, the paired question is evaluated under both prompt modalities, resulting in paired observations. This pairing allows for a direct comparison between modalities using McNemar’s test as further explained in section 2.4.2.
 
-The outcome metric in all analyses is accuracy, the proportion of questions answered correctly. Because each question has exactly one correct option, is scored as correct/incorrect and the data isn't imbalanced, accuracy is a good performance measure to use.
+The outcome metric in all analyses is accuracy, the proportion of questions answered correctly. Because each question has exactly one correct option, is scored as correct/incorrect and the data isn't imbalanced, accuracy is a good performance measure to use. This matters because accuracy can be misleading for imbalanced data, where precision and recall are preferred instead, as shown in slide~5 of the Day~4 lecture material\supercite{das2026day4}.
 
 
 \subsubsection{Prompting Strategy}
