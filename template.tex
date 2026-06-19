@@ -235,9 +235,9 @@ A small $p$-value indicates that the observed imbalance between ($b$) and ($c$) 
 
 \subsubsection{Binomial tests}
 
-The binomial tests form two families of four, with one test per input format. The first family assesses whether Gemma's accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. The second assesses whether Gemma could pass the exam, i.e. whether its accuracy exceeded the 50\% threshold. \newline 
-Two further full-exam simulations test whether Gemma could pass a realistic exam containing both text and image questions. The first combines the unpaired text, unpaired image and paired-text questions; the second combines them with the paired questions as a screenshot.\newline
-All of these were one-sided tests since the purpose was to see how much better Gemma was than the baseline.
+This study performs 12 binomial tests in total. 6 of them assess whether Gemma's accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. The last two of these being full-exam simulations with multiple modalities combined. The other 6 binomial tests assess whether Gemma could pass the exam, i.e. whether its accuracy exceeded the 50\% threshold. The last two of these were also full-exam simulations. \newline 
+For the two full-exam simulations; The first combines the unpaired text, unpaired image and paired-text questions, the second combines the unpaired text, unpaired image and paired-image questions\newline
+All of these were one-sided tests since the purpose was to see how much better Gemma was than the guessing baseline/passing threshold.
 
 The assumptions of a binomial test are 1) The outcomes should be binary, correct/incorrect, 2) Independent trials, the outcome of one trial shouldn't have an effect on the next one, 3) The probability for correct shouldn't change between trials. All of these assumptions are met in this study, and therefore a binomial test is a suitable test to check if the answers from Gemma are better than random guessing.\newline
 \newline
@@ -250,14 +250,14 @@ Because the test is one-sided, we need the probability of getting at least as ma
 
 $$p_{value} = P(X \ge x) = 1 - F(x-1)$$
 
-Since each family contains four binomial tests asking the same question, there is a risk that one of them returns
+Since each family contains six binomial tests asking the same question, there is a risk that one of them returns
 a significant result purely by chance. Running $m$ tests each at $\alpha = 0.05$ 
 raises the family-wise false positive rate to approximately $1 - 0.95^m$, so we 
 apply the Bonferroni correction to control for this. The correction simply 
 divides the significance threshold by the number of tests in the family:
 
 \[
-    \alpha_{\text{Bonf}} = \frac{\alpha}{m} = \frac{0.05}{4} = 0.0125
+    \alpha_{\text{Bonf}} = \frac{\alpha}{m} = \frac{0.05}{6} = 0.00833
 \]
 
 This is the significance level we will compare our p-values to in the results section. Noteworthy, the Bonferroni method greatly reduces false positives (Type I errors) but increases the risk of missing true effects (Type II errors).
@@ -332,8 +332,8 @@ Paired text     &  86 & 134 & 64.2\% & [56.1,\,72.3] \\
 Paired image    &  60 & 134 & 44.8\% & [36.4,\,53.2] \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Full-exam accuracy --- each question counted once}} \\
-Unpaired text + unpaired image + paired (image) & 223 & 432 & 51.6\% & [46.9,\,56.3] \\
-Unpaired text + unpaired image + paired (text)  & 249 & 432 & 57.6\% & [53.0,\,62.3] \\
+Unpaired text + unpaired image + paired image & 223 & 432 & 51.6\% & [46.9,\,56.3] \\
+Unpaired text + unpaired image + paired text  & 249 & 432 & 57.6\% & [53.0,\,62.3] \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- paired shown as image}} \\
 Exams 2017--2024    & 187 & 378 & 49.5\% & [44.4,\,54.5] \\
@@ -428,7 +428,7 @@ Since the $p_{value}$ is considerably smaller than the significance level of \(\
 
 \subsection{Binomial tests}
 
-One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Within each family of four, p-values were compared to the Bonferroni-corrected $\alpha_{\text{Bonf}}=0.0125$. The same test was also applied to two full-exam simulations that combine the different modalities as in a realistic exam (bottom rows).
+One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Within each family of four, p-values were compared to the Bonferroni-corrected $\alpha_{\text{Bonf}}=0.00833$. The same test was also applied to two full-exam simulations that combine the different modalities as in a realistic exam (bottom rows).
 
 \begin{center}
 \begin{tabular}{lccccc}
