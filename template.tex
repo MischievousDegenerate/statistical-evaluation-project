@@ -85,13 +85,13 @@ The dataset employed in this study consists of publicly available examination se
 The exam questions were categorized according to the modality in which the relevant information was presented:
 
 \begin{itemize}
-    \item \textbf{Pure questions:}
+    \item \textbf{Unpaired questions:}
     \begin{itemize}
     \item \textbf{Text}: All information required to answer the question is presented as text.
     \item \textbf{Image}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram.
     \end{itemize}
     
-    \item \textbf{Unpure questions}: The question contains both visual representations and text needed in order to solve the question.
+    \item \textbf{Paired questions}: The question contains both visual representations and text needed in order to solve the question.
 \end{itemize}
 
 
@@ -105,12 +105,12 @@ The exam questions were categorized according to the modality in which the relev
 The objective of the experiment was to evaluate Gemma's ability to answer multiple-choice examination questions presented through different information modalities. The four different input modalities are presented below.
 
 \begin{itemize}
-    \item Pure questions:
+    \item Unpaired questions:
     \begin{itemize}
         \item \textbf{Unpaired text:} Gemma received the information text and answer options.
         \item \textbf{Unpaired image:} Gemma received the visual element as a screenshot together with the question text and answer options.
     \end{itemize}
-    \item Unpure question:
+    \item Paired question:
     \begin{itemize}
         \item \textbf{Paired text}: The visual element was first converted into a detailed textual description using Claude's Fable 5. Gemma then received this generated description together with the original question text and answer options.
         \item \textbf{Paired image}: Gemma received the original question text, answer options, and a screenshot of the associated visual element.
@@ -118,7 +118,9 @@ The objective of the experiment was to evaluate Gemma's ability to answer multip
 \end{itemize}
 
 
-Pure examination questions can be considered independent, as each question is evaluated separately and does not share observations with other questions. Consequently, they produce unpaired (independent) observations. In contrast, the unpure question is evaluated under both prompt modalities, resulting in paired observations. This pairing allows for a direct comparison between modalities using McNemar’s test as further explained in section 2.4.1.
+Unpaired examination questions can be considered independent, as each question is evaluated separately and does not share observations with other questions. Consequently, they produce unpaired (independent) observations. In contrast, the paired question is evaluated under both prompt modalities, resulting in paired observations. This pairing allows for a direct comparison between modalities using McNemar’s test as further explained in section 2.4.2.
+
+The outcome metric in all analyses is accuracy, the proportion of questions answered correctly. Because each question has exactly one correct option and is scored as a symmetric correct/incorrect outcome with no minority or rare-event class, accuracy is an unbiased measure of performance here, so the class-imbalance concerns that motivate metrics such as precision and recall do not apply.
 
 
 \subsubsection{Prompting Strategy}
@@ -135,7 +137,7 @@ The prompt provided to Gemma was:
 ``You are answering a multiple-choice exam question from a university Machine Learning course. Each question has exactly one correct answer among A, B, C, D. You may also answer E if you genuinely do not know. Think the problem through step by step: write out your reasoning and any calculations first, but keep each step short and to the point. ALWAYS finish your reply with one line of exactly this form: FINAL ANSWER: X where X is a single capital letter A, B, C, D, or E.''
 \end{quote}
 
-Depending on the experimental condition described in Section 2.3, either textual content or visual information was appended to this prompt before being submitted to Gemma.
+Depending on the experimental condition described in Section 2.2, either textual content or visual information was appended to this prompt before being submitted to Gemma.
 
 \subsection{The Model}
 The model used in the project is Gemma 4 E2B. It is an open source language model developed by Google DeepMind. Gemma 4 is a multimodal model capable of processing both textual and visual inputs, making it suitable for the experimental design of this study, which involves both text and image processing. The model was selected due to its strong performance among open-source large language models. In official documentation, Google describes the Gemma family as “the most capable open source models.”\supercite{gemma4modelcard}
@@ -154,7 +156,13 @@ To account for this, we subsequently perform a one-sided two-proportion z-test c
 
 \subsection{Statistical methods}
 
-%All reported accuracy estimates are accompanied by 95\% Wilson confidence intervals.
+\subsubsection{Confidence intervals}
+
+All accuracy estimates are reported with a 95\% confidence interval. Since each accuracy is a proportion of correct answers, we use the normal-approximation interval
+
+$$\hat{p} \pm 1.96\sqrt{\frac{\hat{p}(1-\hat{p})}{n}},$$
+
+where $\hat{p}$ is the observed accuracy and $n$ is the number of questions. The value $1.96$ is the $97.5\%$ quantile of the standard normal distribution and gives 95\% coverage, and the samples are large enough for the normal approximation to be reasonable.
 
 \subsubsection{McNemar test}
 
@@ -229,9 +237,9 @@ A small $p$-value indicates that the observed imbalance between ($b$) and ($c$) 
 
 \subsubsection{Binomial tests}
 
-Ten binomial tests were conducted in this study. 4 to assess whether Gemma’s accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. 4 to assess whether Gemma could pass the exam i.e. a binomial test to see whether Gemma's accuracy exceeded 50\% for each modality. \newline 
-The last 2 tests were full-exam simulations to see if Gemma could pass a realistic exam containing both text and image questions. The first one was a combination of Pure text, Pure image and the paired questions as text. The second one was a combination of Pure text, Pure image and the paired questions as a screenshot.\newline
-all of these were one-sided tests since the purpose was to see how much better Gemma was than the baseline.
+The binomial tests form two families of four, with one test per input format. The first family assesses whether Gemma's accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. The second assesses whether Gemma could pass the exam, i.e. whether its accuracy exceeded the 50\% threshold. \newline 
+Two further full-exam simulations test whether Gemma could pass a realistic exam containing both text and image questions. The first combines the unpaired text, unpaired image and paired-text questions; the second combines them with the paired questions as a screenshot.\newline
+All of these were one-sided tests since the purpose was to see how much better Gemma was than the baseline.
 
 The assumptions of a binomial test are 1) The outcomes should be binary, correct/incorrect, 2) Independent trials, the outcome of one trial shouldn't have an effect on the next one, 3) The probability for correct shouldn't change between trials. All of these assumptions are met in this study, and therefore a binomial test is a suitable test to check if the answers from Gemma are better than random guessing.\newline
 \newline
@@ -244,8 +252,7 @@ Because the test is one-sided, we need the probability of getting at least as ma
 
 $$p_{value} = P(X \ge x) = 1 - F(x-1)$$
 
-Since we run five binomial tests all asking the same question, whether Gemma 
-performs above the 25\% chance level, there is a risk that one of them returns 
+Since each family contains four binomial tests asking the same question, there is a risk that one of them returns
 a significant result purely by chance. Running $m$ tests each at $\alpha = 0.05$ 
 raises the family-wise false positive rate to approximately $1 - 0.95^m$, so we 
 apply the Bonferroni correction to control for this. The correction simply 
@@ -259,7 +266,7 @@ This is the significance level we will compare our p-values to in the results se
 
 \subsubsection{Two-proportion z-test}
 
-The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the pure text questions (given as text) with the pure image questions (given as screenshots), to see whether the format changes how well it does. This is a two-sided test. The second is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
+The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the unpaired text questions (given as text) with the unpaired image questions (given as screenshots), to see whether the format changes how well it does. This is a two-sided test. The second is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
 
 The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is the number of successes and failures must both be at least 10 respectively in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test.\newline
 \newline
@@ -276,7 +283,7 @@ Under $H_0$ the $z$-statistic follows a standard normal distribution, so the p-v
 
 \subsubsection{Power}
 
-Since the dataset is fixed and numbers of questions can't be increased, the minimum effect size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed, following the power analysis in Section~3.2 (p.~8) described by Due et al.\supercite{due2024evaluation}.
+Since the dataset is fixed and numbers of questions can't be increased, the minimum effect size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed, following the sample-size formula for a difference in independent proportions given in slide~14 of the Day~4 lecture material\supercite{das2026day4}.
 
 We start from the two-proportion sample-size formula, in which $p_1$ and $p_2$ are the true accuracies of the two groups,
 
@@ -299,7 +306,7 @@ p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{141}} \\
 &\approx 0.17
 \end{align*}
 
-So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure text and pure image questions is $0.738 - 0.376 = 0.36$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
+So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the unpaired text and unpaired image questions is $0.738 - 0.376 = 0.36$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
 
 The same method was used for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 54$ post-cutoff 2025 questions, so
 $$p_1 - p_2 = (1.645 + 0.84)\sqrt{\frac{0.25 + 0.25}{54}} \approx 0.24.$$
@@ -423,7 +430,7 @@ Since the $p_{value}$ is considerably smaller than the significance level of \(\
 
 \subsection{Binomial tests}
 
-One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). All tests were compared to the bonferroni correct $\alpha_{\text{Bonf}}=0.0125$
+One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Within each family of four, p-values were compared to the Bonferroni-corrected $\alpha_{\text{Bonf}}=0.0125$.
 
 \begin{center}
 \begin{tabular}{lcccc}
@@ -440,17 +447,17 @@ Paired image & 44.8\% & $5.1 \times 10^{-7}$  & $0.90$               & No  \\
 
 \vspace{2ex}
 
-Every modality beats chance, all four $p$-values against the 25\% baseline are far below the corrected threshold. Against the 50\% passing threshold the formats split along modalities. Gemma passes when the information is text (pure text and paired text descriptions) but fails when the questions are presented as a screenshot.
+Every modality beats chance, all four $p$-values against the 25\% baseline are far below the corrected threshold. Against the 50\% passing threshold the formats split along modalities. Gemma passes when the information is text (unpaired text and paired text descriptions) but fails when the questions are presented as a screenshot.
 
-To simulate a full exam, the same binomial test was used, but instead of Pure text or Pure image, the different modalities were combined. This simulated a full exam since normal exams are combinations of the different modalities.
+To simulate a full exam, the same binomial test was used, but instead of unpaired text or unpaired image, the different modalities were combined. This simulated a full exam since normal exams are combinations of the different modalities.
 
 \begin{center}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Consistently pass} \\
 \midrule
-Pure text + Pure image + Paired image  & 51.6\% & $2.1 \times 10^{-32}$ & $0.27$               & No  \\
-Pure text + Pure image + Paired text   & 57.6\% & $6.0 \times 10^{-47}$ & $8.7 \times 10^{-4}$ & Yes \\
+Unpaired text + unpaired image + paired (image)  & 51.6\% & $2.1 \times 10^{-32}$ & $0.27$               & No  \\
+Unpaired text + unpaired image + paired (text)   & 57.6\% & $6.0 \times 10^{-47}$ & $8.7 \times 10^{-4}$ & Yes \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -466,14 +473,14 @@ When table questions are shown as screenshots, Gemma barely exceeds the passing 
 
 \subsection{Two-proportion z-tests}
 
-The two-proportion z-test was used for two comparisons: the pure-text vs.\ pure-image modality gap (two-sided), and the pre- vs.\ post-cutoff contamination check (one-sided).
+The two-proportion z-test was used for two comparisons: the unpaired-text vs.\ unpaired-image modality gap (two-sided), and the pre- vs.\ post-cutoff contamination check (one-sided).
 
 \begin{center}
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Comparison} & \textbf{Accuracies} & \textbf{$z$} & \textbf{$p$} & \textbf{Significant} \\
 \midrule
-Pure text vs. pure image (two-sided) & 73.8\% vs. 37.6\% & $6.26$  & $3.7 \times 10^{-10}$ & Yes \\
+Unpaired text vs. unpaired image (two-sided) & 73.8\% vs. 37.6\% & $6.26$  & $3.7 \times 10^{-10}$ & Yes \\
 Pre/post-cutoff, paired as image (one-sided) & 49.5\% vs. 66.7\% & $-2.37$ & $0.99$ & No \\
 Pre/post-cutoff, paired as text (one-sided)  & 56.1\% vs. 68.5\% & $-1.73$ & $0.96$ & No \\
 \bottomrule
@@ -482,7 +489,7 @@ Pre/post-cutoff, paired as text (one-sided)  & 56.1\% vs. 68.5\% & $-1.73$ & $0.
 
 \vspace{2ex}
 
-Gemma was far more accurate on pure text questions (73.8\%, $n = 141$) than on screenshots (37.6\%, $n = 157$), a highly significant 36 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
+Gemma was far more accurate on unpaired text questions (73.8\%, $n = 141$) than on screenshots (37.6\%, $n = 157$), a highly significant 36 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
 
 For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams, counting each question once. The result runs opposite to what contamination would predict regardless of how the paired questions are scored: Gemma was more accurate on the clean 2025 exams than on the older ones both when the paired questions are shown as images (66.7\% vs.\ 49.5\%) and as text (68.5\% vs.\ 56.1\%). Since the clean exams scored \emph{higher} either way, there is no evidence that training-data memorisation is inflating the results.
 
@@ -505,14 +512,14 @@ overordnet konklusion på vores projekt
 \begin{figure}
     \centering
     \includegraphics[width=0.65\linewidth]{images/Type A.png}
-    \caption{Pure text example}
+    \caption{Unpaired text example}
     \label{fig:typeA}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{images/Type B.png}
-    \caption{Pure image example}
+    \caption{Unpaired image example}
     \label{fig:typeB}
 \end{figure}
 
