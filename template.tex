@@ -69,9 +69,7 @@ The rapid advancement of generative artificial intelligence has raised important
 
 Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma-4-e2b on multiple-choice examination sets from the DTU course Introduction to Machine Learning and Data Mining (02450, 02452). Specifically, the study tests whether the model answers fewer questions correctly when a figure or table is shown as an image than when the same information is given as text. This addresses the multimodal evaluation gap described in Section~3.3 (p.~14) of "Sociotechnical Safety Evaluation of Generative AI Systems"\supercite{weidinger2023sociotechnical}. This is done to show the strengths and weaknesses of a locally run open-source model like Gemma, and to find out which kinds of questions are more AI-resistant: those given as text, or those that rely on figures and tables.
 
-To evaluate the model, Gemma was tested on 16 publicly available examination sets spanning the years 2017–2025. Each exam set contains 27 multiple-choice questions, giving 432 distinct questions in total. Because the questions that contain a figure or table are evaluated both as an image and as a text description, these are counted under both formats, so the analyses are based on more observations than there are questions. The model's answers were compared against the official solutions in order to measure its accuracy.
-
-A central objective of the study was to compare Gemma's performance on image-based and text-based prompts. For questions containing graphical visualizations, the model was evaluated under two separate conditions. In the first condition, Gemma received a screenshot of the visualization together with the original question text. In the second condition, the visualization was replaced by a detailed textual description generated using Anthropics Fable 5 model, while the original question text remained unchanged. This experimental setup allowed for a direct comparison of the model's ability to interpret graphical information versus equivalent textual descriptions.
+To evaluate the model, Gemma was tested on 16 publicly available examination sets spanning the years 2017–2025. Each exam set contains 27 multiple-choice questions, giving 432 distinct questions in total. A central objective of the study was to compare Gemma's performance on image-based and text-based prompts. For questions containing graphical visualizations, the model was evaluated under two separate conditions. In the first condition, Gemma received a screenshot of the visualization together with the original question text. In the second condition, the visualization was replaced by a detailed textual description generated using Anthropics Fable 5 model, while the original question text remained unchanged. This experimental setup allowed for a direct comparison of the model's ability to interpret graphical information versus equivalent textual descriptions.
 
 The findings of this study provide insight into the practical capabilities of a locally run model like Gemma in an academic setting and contribute to the broader discussion surrounding the role of generative AI in modern education.
 
@@ -88,10 +86,10 @@ The exam questions were categorized according to the modality in which the relev
     \item \textbf{Unpaired questions:}
     \begin{itemize}
     \item \textbf{Text}: All information required to answer the question is presented as text.
-    \item \textbf{Image}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram.
+    \item \textbf{Image}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram. These questions couldn't be translated into text directly.
     \end{itemize}
     
-    \item \textbf{Paired questions}: The question contains both visual representations and text needed in order to solve the question.
+    \item \textbf{Paired questions}: The question contains information that can both be described as text and as a screenshot. e.g. questions containing a matrix, a vector or a table. 
 \end{itemize}
 
 
@@ -120,7 +118,7 @@ The objective of the experiment was to evaluate Gemma's ability to answer multip
 
 Unpaired examination questions can be considered independent, as each question is evaluated separately and does not share observations with other questions. Consequently, they produce unpaired (independent) observations. In contrast, the paired question is evaluated under both prompt modalities, resulting in paired observations. This pairing allows for a direct comparison between modalities using McNemar’s test as further explained in section 2.4.2.
 
-The outcome metric in all analyses is accuracy, the proportion of questions answered correctly. Because each question has exactly one correct option and is scored as a symmetric correct/incorrect outcome with no minority or rare-event class, accuracy is an unbiased measure of performance here, so the class-imbalance concerns that motivate metrics such as precision and recall do not apply.
+The outcome metric in all analyses is accuracy, the proportion of questions answered correctly. Because each question has exactly one correct option, is scored as correct/incorrect and the data isn't imbalanced, accuracy is a good performance measure to use.
 
 
 \subsubsection{Prompting Strategy}
