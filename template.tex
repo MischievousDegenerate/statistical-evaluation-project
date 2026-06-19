@@ -160,7 +160,7 @@ All accuracy estimates are reported with a 95\% confidence interval. Since each 
 
 $$\hat{p} \pm 1.96\sqrt{\frac{\hat{p}(1-\hat{p})}{n}},$$
 
-where $\hat{p}$ is the observed accuracy and $n$ is the number of questions. The value $1.96$ is the $97.5\%$ quantile of the standard normal distribution and the samples are large enough for the normal approximation to be reasonable.
+where $\hat{p}$ is the observed accuracy and $n$ is the number of questions. The value $1.96$ is the $97.5\%$ quantile of the standard normal distribution. The test is valid if $np > 15$ and $n(1-p) > 15$; that is, the expected numbers of successes and failures must each be greater than $15$.
 
 \subsubsection{McNemar's test}
 
@@ -281,13 +281,13 @@ Under $H_0$ the $z$-statistic follows a standard normal distribution, so the p-v
 
 \subsubsection{Power}
 
-Since the dataset is fixed and numbers of questions can't be increased, the minimum effect size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed, following the sample-size formula for a difference in independent proportions given in slide~14 of the Day~4 lecture material\supercite{das2026day4}.
+Since the dataset is fixed and numbers of questions can't be increased, the minimum effect-size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed, following the sample-size formula for a difference in independent proportions given in slide~14 of the Day~4 lecture material\supercite{das2026day4}.
 
 We start from the two-proportion sample-size formula, in which $p_1$ and $p_2$ are the true accuracies of the two groups,
 
 $$n = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{(p_1 - p_2)^2}$$
 
-and rearrange it to isolate the difference $p_1 - p_2$. Multiplying both sides by $(p_1 - p_2)^2$ and dividing by $n$,
+and rearrange it to isolate the effect-size $p_1 - p_2$. Multiplying both sides by $(p_1 - p_2)^2$ and dividing by $n$,
 
 $$(p_1 - p_2)^2 = \frac{(Z_{\alpha/2} + Z_{\beta})^2 \left[ p_1(1 - p_1) + p_2(1 - p_2) \right]}{n}$$
 
@@ -295,7 +295,7 @@ and taking the square root of both sides gives
 
 $$p_1 - p_2 = (Z_{\alpha/2} + Z_{\beta})\sqrt{\frac{p_1(1 - p_1) + p_2(1 - p_2)}{n}}$$
 
-To find the smallest effect size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 141$,
+To find the smallest effect-size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 141$,
 
 \begin{align*}
 p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{141}} \\
@@ -323,7 +323,7 @@ With only 54 post-cutoff questions the check is therefore only well-powered to d
 \label{tab:accuracy-ci}
 \begin{tabular}{lrrrr}
 \toprule
-\textbf{Group} & \textbf{Correct} & $n$ & \textbf{Accuracy} & \textbf{95\% CI} \\
+\textbf{Group} & $n_{correct}$ & $n_{total}$ & \textbf{Accuracy} & \textbf{95\% CI} \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by input format}} \\
 Unpaired text   &  104 & 141 & 73.8\% & [66.5,\,81.0] \\
@@ -428,14 +428,14 @@ Since the $p_{value}$ is considerably smaller than the significance level of \(\
 
 \subsection{Binomial tests}
 
-One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Within each family of four, p-values were compared to the Bonferroni-corrected $\alpha_{\text{Bonf}}=0.00833$. The same test was also applied to two full-exam simulations that combine the different modalities as in a realistic exam (bottom rows).
+One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Within each family of six, p-values were compared to the Bonferroni-corrected $\alpha_{\text{Bonf}}=0.00833$. The same test was also applied to two full-exam simulations that combine the different modalities as in a realistic exam.
 
 \begin{center}
 \begin{tabular}{lccccc}
 \toprule
-\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{\shortstack{Better than\\ guessing}} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Pass} \\
+\textbf{Input format} & \textbf{Accuracy} & \textbf{$p_{value}$ (vs.\ 25\%)} & \textbf{\shortstack{Better than\\ guessing}} & \textbf{$p_{value}$ (vs.\ 50\%)} & \textbf{Pass} \\
 \midrule
-\multicolumn{6}{@{}l}{\textit{By input format}} \\
+\multicolumn{6}{@{}l}{\textit{}} \\
 Unpaired text         & 73.8\% & $8.8 \times 10^{-34}$ & Yes & $7.3 \times 10^{-9}$ & Yes \\
 Unpaired image   & 37.6\% & $3.3 \times 10^{-4}$  & Yes & $> 0.99$             & No  \\
 Paired text       & 64.2\% & $1.4 \times 10^{-21}$ & Yes & $6.5 \times 10^{-4}$ & Yes \\
@@ -450,7 +450,7 @@ Unpaired text + unpaired image + paired (text)   & 57.6\% & $6.0 \times 10^{-47}
 
 \vspace{2ex}
 
-Every modality beats chance, and all four $p$-values against the 25\% baseline are far below the corrected threshold. Against the 50\% passing threshold the formats split along modalities: Gemma passes when the information is text (unpaired text and paired text descriptions) but fails when it is presented as a screenshot. The same split appears in the full-exam simulations --- when table questions are shown as screenshots Gemma barely exceeds the passing threshold but not significantly ($p = 0.27$), whereas with text descriptions it passes with $p < 0.001$.
+Every modality beats chance, and all six $p$-values against the 25\% baseline are far below the corrected threshold. Against the 50\% passing threshold the formats split along modalities: Gemma passes when the information is text (unpaired text and paired text descriptions) but fails when it is presented as a screenshot. The same split appears in the full-exam simulations, when table questions are shown as screenshots Gemma barely exceeds the passing threshold but not significantly ($p = 0.27$), whereas with text descriptions it passes with $p < 0.001$.
 
 
 
@@ -464,7 +464,7 @@ The two-proportion z-test was used for two comparisons: the unpaired-text vs.\ u
 \begin{center}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Comparison} & \textbf{Accuracies} & \textbf{$z$} & \textbf{$p$} & \textbf{Significant} \\
+\textbf{Comparison} & \textbf{Accuracies} & \textbf{$z_{obs}$} & \textbf{$p_{value}$} & \textbf{Significant} \\
 \midrule
 Unpaired text vs. unpaired image (two-sided) & 73.8\% vs. 37.6\% & $6.26$  & $3.7 \times 10^{-10}$ & Yes \\
 Pre/post-cutoff, paired as image (one-sided) & 49.5\% vs. 66.7\% & $-2.37$ & $0.99$ & No \\
