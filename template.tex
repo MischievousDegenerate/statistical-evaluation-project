@@ -301,9 +301,9 @@ p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
 
 So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure text and pure image questions is $0.731 - 0.361 = 0.37$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
 
-The same method was used for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 68$ post-cutoff 2025 questions, so
-$$p_1 - p_2 = (1.645 + 0.84)\sqrt{\frac{0.25 + 0.25}{68}} \approx 0.21.$$
-With only 68 post-cutoff questions the check is therefore only well-powered to detect a large pre-cutoff inflation (about $21$\% or more). The difference actually observed ($67.6\% - 52.8\% = 14.8\%$) is smaller than this and runs the opposite way, so the non-significant result should be read with this limited power in mind.
+The same method was used for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 54$ post-cutoff 2025 questions, so
+$$p_1 - p_2 = (1.645 + 0.84)\sqrt{\frac{0.25 + 0.25}{54}} \approx 0.24.$$
+With only 54 post-cutoff questions the check is therefore only well-powered to detect a large pre-cutoff inflation (about $24$\% or more). The differences actually observed (about $17$\% when the paired questions are scored as images and $12$\% as text) are smaller than this and run the opposite way, so the non-significant result should be read with this limited power in mind.
 
 \section{Results}
 
@@ -314,24 +314,33 @@ With only 68 post-cutoff questions the check is therefore only well-powered to d
 
 \begin{table}[H]
 \centering
-\caption{This table shows the results from the Gemma 4 run through the exam sets. Accuracy is calculated as $n_{correct}/n_{total}$.}
+\caption{Accuracy of the Gemma~4 run, with each question counted once. Each exam contains 27 distinct questions; the paired (figure/table) questions are shown either as an image or as a text description, so the full-exam totals and the by-date rows are reported under both presentations. The 127 paired questions are listed once under \emph{Paired text} and once under \emph{Paired image}, so the four input-format rows overlap and do not sum to the full-exam total ($405 = 134 + 144 + 127$). Accuracy is $n_{correct}/n_{total}$; 95\% confidence intervals use the normal approximation.}
 \label{tab:accuracy-ci}
 \begin{tabular}{lrrrr}
 \toprule
 \textbf{Group} & \textbf{Correct} & $n$ & \textbf{Accuracy} & \textbf{95\% CI} \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by input format}} \\
-Overall (all formats)             & 284 & 532 & 53.4\% & [49.1,\,57.6] \\
-Unpaired text                         &  98 & 134 & 73.1\% & [65.1,\,79.9] \\
-Unpaired image                   &  52 & 144 & 36.1\% & [28.7,\,44.2] \\
-Paired text &  80 & 127 & 63.0\% & [54.3,\,70.9] \\
-Paired image       &  54 & 127 & 42.5\% & [34.3,\,51.2] \\
+Unpaired text   &  98 & 134 & 73.1\% & [65.6,\,80.6] \\
+Unpaired image  &  52 & 144 & 36.1\% & [28.3,\,44.0] \\
+Paired text     &  80 & 127 & 63.0\% & [54.6,\,71.4] \\
+Paired image    &  54 & 127 & 42.5\% & [33.9,\,51.1] \\
 \midrule
-\multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- before vs.\ after January 2025}} \\
-Exams 2017--2024    & 263 & 498 & 52.8\% & [48.4,\,57.2] \\
-Spring 2025         &  21 &  34 & 61.8\% & [45.0,\,76.1] \\
-Fall 2025           &  25 &  34 & 73.5\% & [56.9,\,85.4] \\
-2025 exams combined &  46 &  68 & 67.6\% & [55.8,\,77.6] \\
+\multicolumn{5}{@{}l}{\textit{Full-exam accuracy --- each question counted once}} \\
+Pure text + pure image + paired (image) & 204 & 405 & 50.4\% & [45.5,\,55.2] \\
+Pure text + pure image + paired (text)  & 230 & 405 & 56.8\% & [52.0,\,61.6] \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- paired shown as image}} \\
+Exams 2017--2024    & 187 & 378 & 49.5\% & [44.4,\,54.5] \\
+Spring 2025         &  17 &  27 & 63.0\% & [44.7,\,81.2] \\
+Fall 2025           &  19 &  27 & 70.4\% & [53.1,\,87.6] \\
+2025 exams combined &  36 &  54 & 66.7\% & [54.1,\,79.2] \\
+\midrule
+\multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- paired shown as text}} \\
+Exams 2017--2024    & 212 & 378 & 56.1\% & [51.1,\,61.1] \\
+Spring 2025         &  18 &  27 & 66.7\% & [48.9,\,84.4] \\
+Fall 2025           &  19 &  27 & 70.4\% & [53.1,\,87.6] \\
+2025 exams combined &  37 &  54 & 68.5\% & [56.1,\,80.9] \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -465,7 +474,8 @@ The two-proportion z-test was used for two comparisons: the pure-text vs.\ pure-
 \textbf{Comparison} & \textbf{Accuracies} & \textbf{$z$} & \textbf{$p$} & \textbf{Significant} \\
 \midrule
 Pure text vs. pure image (two-sided) & 73.1\% vs. 36.1\% & $6.19$  & $6.1 \times 10^{-10}$ & Yes \\
-Pre- vs. post-cutoff (one-sided)     & 52.8\% vs. 67.6\% & $-2.31$ & $0.99$                & No  \\
+Pre/post-cutoff, paired as image (one-sided) & 49.5\% vs. 66.7\% & $-2.37$ & $0.99$ & No \\
+Pre/post-cutoff, paired as text (one-sided)  & 56.1\% vs. 68.5\% & $-1.73$ & $0.96$ & No \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -474,7 +484,7 @@ Pre- vs. post-cutoff (one-sided)     & 52.8\% vs. 67.6\% & $-2.31$ & $0.99$     
 
 Gemma was far more accurate on pure text questions (73.1\%, $n = 134$) than on screenshots (36.1\%, $n = 144$), a highly significant 37 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
 
-For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams. The result runs opposite to what contamination would predict: Gemma scored 67.6\% on the clean exams versus 52.8\% on the older ones, so there is no evidence that training-data memorisation is inflating the results.
+For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams, counting each question once. The result runs opposite to what contamination would predict regardless of how the paired questions are scored: Gemma was more accurate on the clean 2025 exams than on the older ones both when the paired questions are shown as images (66.7\% vs.\ 49.5\%) and as text (68.5\% vs.\ 56.1\%). Since the clean exams scored \emph{higher} either way, there is no evidence that training-data memorisation is inflating the results.
 
 
 \section{Discussion}
