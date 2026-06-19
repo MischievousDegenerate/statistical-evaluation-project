@@ -290,16 +290,16 @@ and taking the square root of both sides gives
 
 $$p_1 - p_2 = (Z_{\alpha/2} + Z_{\beta})\sqrt{\frac{p_1(1 - p_1) + p_2(1 - p_2)}{n}}$$
 
-To find the smallest effect size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 134$,
+To find the smallest effect size detectable we set each term $p(1-p)$ at its maximum $0.25$, which occurs at $p = 0.5$. With $\alpha = 0.05$ (so $Z_{\alpha/2} = 1.96$), power $0.80$ (so $Z_{\beta} = 0.84$) and the smaller group size $n = 141$,
 
 \begin{align*}
-p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{134}} \\
-&= 2.80 \cdot \sqrt{\frac{0.5}{134}} \\
-&= 2.80 \cdot 0.0611 \\
+p_1 - p_2 &= (1.96 + 0.84)\sqrt{\frac{0.25 + 0.25}{141}} \\
+&= 2.80 \cdot \sqrt{\frac{0.5}{141}} \\
+&= 2.80 \cdot 0.0596 \\
 &\approx 0.17
 \end{align*}
 
-So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure text and pure image questions is $0.731 - 0.361 = 0.37$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
+So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at least $80\%$ of the time. The gap that was observed in the Gemma run between the pure text and pure image questions is $0.738 - 0.376 = 0.36$, which is a lot higher than $0.17$. This means that the z-test is a good test to use in this study, and that it will almost always find a statistical significant difference between $p_{text}$ and $p_{graph}$ if there is one.
 
 The same method was used for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 54$ post-cutoff 2025 questions, so
 $$p_1 - p_2 = (1.645 + 0.84)\sqrt{\frac{0.25 + 0.25}{54}} \approx 0.24.$$
@@ -314,21 +314,21 @@ With only 54 post-cutoff questions the check is therefore only well-powered to d
 
 \begin{table}[H]
 \centering
-\caption{Accuracy of the Gemma~4 run, with each question counted once. Each exam contains 27 distinct questions; the paired (figure/table) questions are shown either as an image or as a text description, so the full-exam totals and the by-date rows are reported under both presentations. The 127 paired questions are listed once under \emph{Paired text} and once under \emph{Paired image}, so the four input-format rows overlap and do not sum to the full-exam total ($405 = 134 + 144 + 127$). Accuracy is $n_{correct}/n_{total}$; 95\% confidence intervals use the normal approximation.}
+\caption{Accuracy of the Gemma~4 run, with each question counted once. Each exam contains 27 distinct questions; the paired (figure/table) questions are shown either as an image or as a text description, so the full-exam totals and the by-date rows are reported under both presentations. The 134 paired questions are listed once under \emph{Paired text} and once under \emph{Paired image}, so the four input-format rows overlap and do not sum to the full-exam total ($432 = 141 + 157 + 134$). Accuracy is $n_{correct}/n_{total}$; 95\% confidence intervals use the normal approximation.}
 \label{tab:accuracy-ci}
 \begin{tabular}{lrrrr}
 \toprule
 \textbf{Group} & \textbf{Correct} & $n$ & \textbf{Accuracy} & \textbf{95\% CI} \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by input format}} \\
-Unpaired text   &  98 & 134 & 73.1\% & [65.6,\,80.6] \\
-Unpaired image  &  52 & 144 & 36.1\% & [28.3,\,44.0] \\
-Paired text     &  80 & 127 & 63.0\% & [54.6,\,71.4] \\
-Paired image    &  54 & 127 & 42.5\% & [33.9,\,51.1] \\
+Unpaired text   &  104 & 141 & 73.8\% & [66.5,\,81.0] \\
+Unpaired image  &  59 & 157 & 37.6\% & [30.0,\,45.2] \\
+Paired text     &  86 & 134 & 64.2\% & [56.1,\,72.3] \\
+Paired image    &  60 & 134 & 44.8\% & [36.4,\,53.2] \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Full-exam accuracy --- each question counted once}} \\
-Pure text + pure image + paired (image) & 204 & 405 & 50.4\% & [45.5,\,55.2] \\
-Pure text + pure image + paired (text)  & 230 & 405 & 56.8\% & [52.0,\,61.6] \\
+Pure text + pure image + paired (image) & 223 & 432 & 51.6\% & [46.9,\,56.3] \\
+Pure text + pure image + paired (text)  & 249 & 432 & 57.6\% & [53.0,\,62.3] \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- paired shown as image}} \\
 Exams 2017--2024    & 187 & 378 & 49.5\% & [44.4,\,54.5] \\
@@ -364,7 +364,7 @@ Fall 2025           &  19 &  27 & 70.4\% & [53.1,\,87.6] \\
 &
 \textbf{Success}
 &
-45
+51
 &
 9
 \\
@@ -373,14 +373,14 @@ Fall 2025           &  19 &  27 & 70.4\% & [53.1,\,87.6] \\
 &
 35
 &
-38
+39
 \\
 \cline{2-4}
 \end{tabular}
 \end{center}
 
 \vspace{5ex}
-The contingency table summarizes the paired outcomes for the 127 paired questions evaluated using both prompting methods. Both methods correctly answered 45 questions, while both methods incorrectly answered 38 questions.
+The contingency table summarizes the paired outcomes for the 134 paired questions evaluated using both prompting methods. Both methods correctly answered 51 questions, while both methods incorrectly answered 39 questions.
 
 The paired image method correctly answered 9 questions that the paired text method answered incorrectly, whereas the paired text method correctly answered 35 questions that the paired image method answered incorrectly.
 
@@ -430,10 +430,10 @@ One-sided binomial tests were ran on each input format against two baselines: th
 \toprule
 \textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Pass} \\
 \midrule
-Unpaired text         & 73.1\% & $2.0 \times 10^{-31}$ & $4.5 \times 10^{-8}$ & Yes \\
-Unpaired image   & 36.1\% & $2.0 \times 10^{-3}$  & $> 0.99$             & No  \\
-Paired text       & 63.0\% & $1.9 \times 10^{-19}$ & $1.7 \times 10^{-3}$ & Yes \\
-Paired image & 42.5\% & $1.2 \times 10^{-5}$  & $0.95$               & No  \\
+Unpaired text         & 73.8\% & $8.8 \times 10^{-34}$ & $7.3 \times 10^{-9}$ & Yes \\
+Unpaired image   & 37.6\% & $3.3 \times 10^{-4}$  & $> 0.99$             & No  \\
+Paired text       & 64.2\% & $1.4 \times 10^{-21}$ & $6.5 \times 10^{-4}$ & Yes \\
+Paired image & 44.8\% & $5.1 \times 10^{-7}$  & $0.90$               & No  \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -449,15 +449,15 @@ To simulate a full exam, the same binomial test was used, but instead of Pure te
 \toprule
 \textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Consistently pass} \\
 \midrule
-Pure text + Pure image + Paired image  & 50.4\% & $5.6 \times 10^{-28}$ & $0.44$               & No  \\
-Pure text + Pure image + Paired text   & 56.8\% & $4.8 \times 10^{-42}$ & $3.0 \times 10^{-3}$ & Yes \\
+Pure text + Pure image + Paired image  & 51.6\% & $2.1 \times 10^{-32}$ & $0.27$               & No  \\
+Pure text + Pure image + Paired text   & 57.6\% & $6.0 \times 10^{-47}$ & $8.7 \times 10^{-4}$ & Yes \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \vspace{2ex}
 
-When table questions are shown as screenshots, Gemma barely exceeds the passing threshold but the result is not statistically significant ($p = 0.44$). When tables are written out as text descriptions instead, Gemma passes with $p = 0.003$.
+When table questions are shown as screenshots, Gemma barely exceeds the passing threshold but the result is not statistically significant ($p = 0.27$). When tables are written out as text descriptions instead, Gemma passes with $p < 0.001$.
 
 
 
@@ -473,7 +473,7 @@ The two-proportion z-test was used for two comparisons: the pure-text vs.\ pure-
 \toprule
 \textbf{Comparison} & \textbf{Accuracies} & \textbf{$z$} & \textbf{$p$} & \textbf{Significant} \\
 \midrule
-Pure text vs. pure image (two-sided) & 73.1\% vs. 36.1\% & $6.19$  & $6.1 \times 10^{-10}$ & Yes \\
+Pure text vs. pure image (two-sided) & 73.8\% vs. 37.6\% & $6.26$  & $3.7 \times 10^{-10}$ & Yes \\
 Pre/post-cutoff, paired as image (one-sided) & 49.5\% vs. 66.7\% & $-2.37$ & $0.99$ & No \\
 Pre/post-cutoff, paired as text (one-sided)  & 56.1\% vs. 68.5\% & $-1.73$ & $0.96$ & No \\
 \bottomrule
@@ -482,7 +482,7 @@ Pre/post-cutoff, paired as text (one-sided)  & 56.1\% vs. 68.5\% & $-1.73$ & $0.
 
 \vspace{2ex}
 
-Gemma was far more accurate on pure text questions (73.1\%, $n = 134$) than on screenshots (36.1\%, $n = 144$), a highly significant 37 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
+Gemma was far more accurate on pure text questions (73.8\%, $n = 141$) than on screenshots (37.6\%, $n = 157$), a highly significant 36 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
 
 For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams, counting each question once. The result runs opposite to what contamination would predict regardless of how the paired questions are scored: Gemma was more accurate on the clean 2025 exams than on the older ones both when the paired questions are shown as images (66.7\% vs.\ 49.5\%) and as text (68.5\% vs.\ 56.1\%). Since the clean exams scored \emph{higher} either way, there is no evidence that training-data memorisation is inflating the results.
 
