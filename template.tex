@@ -91,7 +91,7 @@ The exam questions were categorized according to the modality in which the relev
     \item \textbf{Image}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram.
     \end{itemize}
     
-    \item \textbf{Unpure questions}: The information required to answer the questions isquestion contains both visual representations and text.
+    \item \textbf{Unpure questions}: The question contains both visual representations and text needed in order to solve the question.
 \end{itemize}
 
 
@@ -153,8 +153,6 @@ To account for this, we subsequently perform a one-sided two-proportion z-test c
 
 
 \subsection{Statistical methods}
-
-Three different statistical frameworks were used to analyze the results.
 
 %All reported accuracy estimates are accompanied by 95\% Wilson confidence intervals.
 
@@ -338,7 +336,7 @@ Fall 2025           &  25 &  34 & 73.5\% & [56.9,\,85.4] \\
 \end{tabular}
 \end{table}
 
-\subsection{McNemar test results}
+\subsection{McNemars test}
 
 \begin{center}
 \begin{tabular}{c c c c}
@@ -414,7 +412,7 @@ p_{value} = P(\chi^2 > \chi^2_{obs}) =8.9 \times 10^{-5}
 Since the $p_{value}$ is considerably smaller than the significance level of \(\alpha = 0.05\), the null hypothesis is rejected. This provides strong evidence that the two prompting methods do not perform equally. Furthermore, the text-text method was correct on 35 of the 44 discordant questions, whereas the text-image method was correct on only 9. Therefore, the results suggest that the text-text prompting method significantly outperformed the text-image prompting method on this dataset.
 
 
-\subsection{Binomial tests: beating chance and passing the exam}
+\subsection{Binomial tests}
 
 One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). All tests were compared to the bonferroni correct $\alpha_{\text{Bonf}}=0.0125$
 
@@ -457,7 +455,7 @@ When table questions are shown as screenshots, Gemma barely exceeds the passing 
 
 
 
-\subsection{Two-proportion z-tests: modality effect and contamination}
+\subsection{Two-proportion z-tests}
 
 The two-proportion z-test was used for two comparisons: the pure-text vs.\ pure-image modality gap (two-sided), and the pre- vs.\ post-cutoff contamination check (one-sided).
 
@@ -474,7 +472,7 @@ Pre- vs. post-cutoff (one-sided)     & 52.8\% vs. 67.6\% & $-2.31$ & $0.99$     
 
 \vspace{2ex}
 
-Gemma was far more accurate on pure text questions (73.1\%, $n = 134$) than on geometric-figure screenshots (36.1\%, $n = 144$), a highly significant 37 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
+Gemma was far more accurate on pure text questions (73.1\%, $n = 134$) than on screenshots (36.1\%, $n = 144$), a highly significant 37 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
 
 For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams. The result runs opposite to what contamination would predict: Gemma scored 67.6\% on the clean exams versus 52.8\% on the older ones, so there is no evidence that training-data memorisation is inflating the results.
 
@@ -488,8 +486,7 @@ overordnet konklusion på vores projekt
 \section{Conclusion}
 
 
-\section{References}
-\printbibliography[title={Litteraturliste}]
+\printbibliography[]
 
 
 
