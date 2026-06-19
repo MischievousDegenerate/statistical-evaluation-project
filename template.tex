@@ -336,7 +336,7 @@ Fall 2025           &  25 &  34 & 73.5\% & [56.9,\,85.4] \\
 \end{tabular}
 \end{table}
 
-\subsection{McNemars test}
+\subsection{McNemar's test}
 
 \begin{center}
 \begin{tabular}{c c c c}
@@ -373,7 +373,7 @@ Fall 2025           &  25 &  34 & 73.5\% & [56.9,\,85.4] \\
 \vspace{5ex}
 The contingency table summarizes the paired outcomes for the 127 paired questions evaluated using both prompting methods. Both methods correctly answered 45 questions, while both methods incorrectly answered 38 questions.
 
-The paired-image method correctly answered 9 questions that the paired-text method answered incorrectly, whereas the paired-text method correctly answered 35 questions that the paired-image method answered incorrectly.
+The paired image method correctly answered 9 questions that the paired text method answered incorrectly, whereas the paired text method correctly answered 35 questions that the paired image method answered incorrectly.
 
 The total number of discordant pairs is therefore
 \[
@@ -382,14 +382,14 @@ b + c = 9 + 35 = 44.
 
 McNemar’s test is based solely on these discordant pairs. The corresponding empirical proportions are:
 \[
-\hat{p}_{\text{text-image}} = \frac{9}{44} \approx 0.205,
+\hat{p}_{\text{paired image}} = \frac{9}{44} \approx 0.205,
 \qquad
-\hat{p}_{\text{text-text}} = \frac{35}{44} \approx 0.795
+\hat{p}_{\text{paired text}} = \frac{35}{44} \approx 0.795
 \]
 
 Under the null hypothesis, the two discordant outcomes are equally likely. In other words, among the questions where the methods disagree, each method is expected to be correct approximately 50\% of the time.
 
-Since the number of discordant pairs is sufficiently large (\(b+c=44 \geq 25\)), the chi-square approximation without continuity correction can be used. The McNemar test statistic is therefore
+Since the number of discordant pairs is sufficiently large (\(b+c=44 \geq 25\)), the chi-square approximation without continuity correction can be used. The McNemar test-statistic is therefore
 
 \[
 \chi_{obs}^2
@@ -438,10 +438,10 @@ To simulate a full exam, the same binomial test was used, but instead of Pure te
 \begin{center}
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Pass} \\
+\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Consistently pass} \\
 \midrule
-Paired image  & 50.4\% & $5.6 \times 10^{-28}$ & $0.44$               & No  \\
-Paired text   & 56.8\% & $4.8 \times 10^{-42}$ & $3.0 \times 10^{-3}$ & Yes \\
+Pure text + Pure image + Paired image  & 50.4\% & $5.6 \times 10^{-28}$ & $0.44$               & No  \\
+Pure text + Pure image + Paired text   & 56.8\% & $4.8 \times 10^{-42}$ & $3.0 \times 10^{-3}$ & Yes \\
 \bottomrule
 \end{tabular}
 \end{center}
