@@ -428,41 +428,29 @@ Since the $p_{value}$ is considerably smaller than the significance level of \(\
 
 \subsection{Binomial tests}
 
-One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Within each family of four, p-values were compared to the Bonferroni-corrected $\alpha_{\text{Bonf}}=0.0125$.
+One-sided binomial tests were ran on each input format against two baselines: the 25\% accuracy expected from guessing ($H_0: p = 0.25$), and the 50\% DTU passing threshold ($H_0: p = 0.50$). Within each family of four, p-values were compared to the Bonferroni-corrected $\alpha_{\text{Bonf}}=0.0125$. The same test was also applied to two full-exam simulations that combine the different modalities as in a realistic exam (bottom rows).
 
 \begin{center}
-\begin{tabular}{lcccc}
+\begin{tabular}{lccccc}
 \toprule
-\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Pass} \\
+\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{\shortstack{Better than\\ guessing}} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Pass} \\
 \midrule
-Unpaired text         & 73.8\% & $8.8 \times 10^{-34}$ & $7.3 \times 10^{-9}$ & Yes \\
-Unpaired image   & 37.6\% & $3.3 \times 10^{-4}$  & $> 0.99$             & No  \\
-Paired text       & 64.2\% & $1.4 \times 10^{-21}$ & $6.5 \times 10^{-4}$ & Yes \\
-Paired image & 44.8\% & $5.1 \times 10^{-7}$  & $0.90$               & No  \\
+\multicolumn{6}{@{}l}{\textit{By input format}} \\
+Unpaired text         & 73.8\% & $8.8 \times 10^{-34}$ & Yes & $7.3 \times 10^{-9}$ & Yes \\
+Unpaired image   & 37.6\% & $3.3 \times 10^{-4}$  & Yes & $> 0.99$             & No  \\
+Paired text       & 64.2\% & $1.4 \times 10^{-21}$ & Yes & $6.5 \times 10^{-4}$ & Yes \\
+Paired image & 44.8\% & $5.1 \times 10^{-7}$  & Yes & $0.90$               & No  \\
+\midrule
+\multicolumn{6}{@{}l}{\textit{Full-exam simulation}} \\
+Unpaired text + unpaired image + paired (image)  & 51.6\% & $2.1 \times 10^{-32}$ & Yes & $0.27$               & No  \\
+Unpaired text + unpaired image + paired (text)   & 57.6\% & $6.0 \times 10^{-47}$ & Yes & $8.7 \times 10^{-4}$ & Yes \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \vspace{2ex}
 
-Every modality beats chance, all four $p$-values against the 25\% baseline are far below the corrected threshold. Against the 50\% passing threshold the formats split along modalities. Gemma passes when the information is text (unpaired text and paired text descriptions) but fails when the questions are presented as a screenshot.
-
-To simulate a full exam, the same binomial test was used, but instead of unpaired text or unpaired image, the different modalities were combined. This simulated a full exam since normal exams are combinations of the different modalities.
-
-\begin{center}
-\begin{tabular}{lcccc}
-\toprule
-\textbf{Input format} & \textbf{Accuracy} & \textbf{$p$ (vs.\ 25\%)} & \textbf{$p$ (vs.\ 50\%)} & \textbf{Consistently pass} \\
-\midrule
-Unpaired text + unpaired image + paired (image)  & 51.6\% & $2.1 \times 10^{-32}$ & $0.27$               & No  \\
-Unpaired text + unpaired image + paired (text)   & 57.6\% & $6.0 \times 10^{-47}$ & $8.7 \times 10^{-4}$ & Yes \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{2ex}
-
-When table questions are shown as screenshots, Gemma barely exceeds the passing threshold but the result is not statistically significant ($p = 0.27$). When tables are written out as text descriptions instead, Gemma passes with $p < 0.001$.
+Every modality beats chance, and all four $p$-values against the 25\% baseline are far below the corrected threshold. Against the 50\% passing threshold the formats split along modalities: Gemma passes when the information is text (unpaired text and paired text descriptions) but fails when it is presented as a screenshot. The same split appears in the full-exam simulations --- when table questions are shown as screenshots Gemma barely exceeds the passing threshold but not significantly ($p = 0.27$), whereas with text descriptions it passes with $p < 0.001$.
 
 
 
