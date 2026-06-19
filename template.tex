@@ -138,7 +138,7 @@ The prompt provided to Gemma was:
 Depending on the experimental condition described in Section 2.2, either textual content or visual information was appended to this prompt before being submitted to Gemma.
 
 \subsection{The Model}
-The model used in the project is Gemma 4 E2B. It is an open source language model developed by Google DeepMind. Gemma 4 is a multimodal model capable of processing both textual and visual inputs, making it suitable for the experimental design of this study, which involves both text and image processing. The model was selected due to its strong performance among open-source large language models. In official documentation, Google describes the Gemma family as “the most capable open source models.”\supercite{gemma4modelcard}
+The model used in the project is Gemma-4-E2B. It is an open source language model developed by Google DeepMind. Gemma 4 is a multimodal model capable of processing both textual and visual inputs, making it suitable for the experimental design of this study, which involves both text and image processing. The model was selected due to its strong performance among open-source large language models. In official documentation, Google describes the Gemma family as “frontier-level performance at each size.”\supercite{gemma4modelcard}
 
 Unlike closed models such as ChatGPT or Claude, Gemma 4 is released under an Apache 2.0 license, meaning it can be downloaded, run locally, and used freely. This was important for the project, since it allowed all experiments to be run on a local machine with full control over the setup, without any API calls and with no concerns about data leaving the local environment.
 
@@ -147,7 +147,7 @@ Running the model locally also made it straightforward to ensure statistical ind
 The Gemma family consists of models of varying size, ranging from 2 to 31 billion parameters. The 2 billion parameter model (Gemma-4-E2B) was chosen so that the study could be reproduced by anyone with a normal computer. It was run on a desktop PC with 16 GB of VRAM. Of that 16 GB it used roughly 10 GB. A typical student laptop, for example a MacBook Air with 16 GB of unified memory, could therefore run it pretty comfortably.
 \newline
 
-Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination, discussed as a key limitation of benchmarks in Section~8.3 (p.~56) of "Evaluating Large Language Models: A Comprehensive Survey"\supercite{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
+Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination, which is discussed as a limitation of benchmarks in Section~8.3 (p.~56) of "Evaluating Large Language Models: A Comprehensive Survey"\supercite{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
 To account for this, we subsequently perform a one-sided two-proportion z-test comparing the success rates on exam sets from before and after January 2025. This test provides evidence as to whether there is a statistically significant difference in performance between the two periods, which may indicate whether the pre-2025 exam material was included in Gemma’s training data.
 
 
@@ -160,9 +160,9 @@ All accuracy estimates are reported with a 95\% confidence interval. Since each 
 
 $$\hat{p} \pm 1.96\sqrt{\frac{\hat{p}(1-\hat{p})}{n}},$$
 
-where $\hat{p}$ is the observed accuracy and $n$ is the number of questions. The value $1.96$ is the $97.5\%$ quantile of the standard normal distribution and gives 95\% coverage, and the samples are large enough for the normal approximation to be reasonable.
+where $\hat{p}$ is the observed accuracy and $n$ is the number of questions. The value $1.96$ is the $97.5\%$ quantile of the standard normal distribution and the samples are large enough for the normal approximation to be reasonable.
 
-\subsubsection{McNemar test}
+\subsubsection{McNemar's test}
 
 McNemar's test was used to compare performance between the screenshot and text-description modalities for paired questions. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population. We employed the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
 
