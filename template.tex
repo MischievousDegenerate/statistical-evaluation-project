@@ -80,40 +80,25 @@ The findings of this study provide insight into the practical capabilities of a 
 
 The dataset employed in this study consists of publicly available examination sets from the DTU course \textit{Introduction to Machine Learning and Data Mining} (02450 and 02452) spanning the years 2017--2025. Both the spring and fall examinations were included, resulting in a total of 16 exam sets. Each examination contains 27 multiple-choice questions, yielding a total sample size of 432 questions.
 
-The exam questions were categorized according to the modality in which the relevant information was presented:
-
-\begin{itemize}
-    \item \textbf{Unpaired questions:}
-    \begin{itemize}
-    \item \textbf{Text}: All information required to answer the question is presented as text.
-    \item \textbf{Image}: The information required to answer the question is presented exclusively through a visual element such as a graph, figure, or diagram. These questions couldn't be translated into text directly.
-    \end{itemize}
-    
-    \item \textbf{Paired questions}: The question contains information that can both be described as text and as a screenshot. e.g. questions containing a matrix, a vector or a table. 
-\end{itemize}
-
-
-\small{See appendix for examples of each question category}\newline
-
-
-
 
 \subsection{The Experimental Setup}
 
 The objective of the experiment was to evaluate Gemma's ability to answer multiple-choice examination questions presented through different information modalities. The four different input modalities are presented below.
 
 \begin{itemize}
-    \item Unpaired questions:
+    \item \textbf{Unpaired questions}: the question is presented in a single modality.
     \begin{itemize}
-        \item \textbf{Unpaired text:} Gemma received the information text and answer options.
-        \item \textbf{Unpaired image:} Gemma received the visual element as a screenshot together with the question text and answer options.
+        \item \textbf{Unpaired text}: all the information needed is text. Gemma received the question text and answer options.
+        \item \textbf{Unpaired image}: the information is presented only through a visual element such as a graph, figure, or diagram that cannot be written out as text. Gemma received it as a screenshot together with the question text and answer options.
     \end{itemize}
-    \item Paired question:
+    \item \textbf{Paired questions}: the question contains information that can be given both as text and as a screenshot, e.g. a matrix, vector, or table.
     \begin{itemize}
-        \item \textbf{Paired text}: The visual element was first converted into a detailed textual description using Claude's Fable 5. Gemma then received this generated description together with the original question text and answer options.
+        \item \textbf{Paired text}: the visual element was first converted into a detailed textual description using Claude's Fable 5. Gemma received this description together with the original question text and answer options.
         \item \textbf{Paired image}: Gemma received the original question text, answer options, and a screenshot of the associated visual element.
     \end{itemize}
 \end{itemize}
+
+\small{See appendix for examples of each question category}\newline
 
 
 Unpaired examination questions can be considered independent, as each question is evaluated separately and does not share observations with other questions. Consequently, they produce unpaired (independent) observations. In contrast, the paired question is evaluated under both prompt modalities, resulting in paired observations. This pairing allows for a direct comparison between modalities using McNemar’s test as further explained in section 2.4.2.
