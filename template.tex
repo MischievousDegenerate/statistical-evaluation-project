@@ -318,7 +318,6 @@ So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at leas
 The same method was used for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 54$ post-cutoff 2025 questions, so
 $$p_1 - p_2 = (1.645 + 0.84)\sqrt{\frac{0.25 + 0.25}{54}} \approx 0.24.$$
 With only 54 post-cutoff questions the check is therefore only well-powered to detect a large pre-cutoff inflation (about $24$\% or more). The differences actually observed (about $17$\% when the paired questions are scored as images and $12$\% as text) are smaller than this and run the opposite way, so the non-significant result should be read with this limited power in mind.
-\texttt{numpy.sqrt} function.
 
 \section{Results}
 
@@ -481,12 +480,9 @@ Pre/post-cutoff, paired as text (one-sided)  & 56.1\% vs. 68.5\% & $-1.73$ & $0.
 
 Gemma was far more accurate on unpaired text questions (73.8\%, $n = 141$) than on screenshots (37.6\%, $n = 157$), a highly significant 36 percentage point gap.
 
-For the contamination check, a one-sided test compared pre-cutoff (2017--2024) accuracy against post-2025 accuracy, with each question counted once. The results run counter to what would be expected under data contamination, regardless of how the paired questions are prompted. Since performance is consistently higher on the 2025 exams in both conditions, there is no evidence that suggests that Gemma has been trained on the pre-2025 exams.training-data memorization is inflating the results.
-
+For the contamination check, a one-sided test compared pre-cutoff (2017--2024) accuracy against post-2025 accuracy, with each question counted once. The results run counter to what would be expected under data contamination, regardless of how the paired questions are prompted. Since performance is consistently higher on the 2025 exams in both conditions, there is no evidence of contamination in the dataset.
 
 \section{Discussion}
-
-
 
 \subsection{Interpretation of the results}
 The McNemar test is the result that matters most here, and the reason is simple. 
@@ -620,17 +616,17 @@ I/we have used AI for the following tasks:
 \medskip
 \textbf{Writing / Text Generation}
 \begin{checklist}
-\chk[] Rephrase or improve wording, grammar, or style.
-\chk[] Summarize external sources or content.
-\chk[] Check or enhance logical flow or structure of the report.
+\chk[x] Rephrase or improve wording, grammar, or style.
+\chk[x] Summarize external sources or content.
+\chk[x] Check or enhance logical flow or structure of the report.
 \chk[] Draft sections of the report.
 \end{checklist}
 
 \textbf{Research \& Information Gathering}
 \begin{checklist}
-\chk[x] Find primary or secondary sources (papers, articles, data).
+\chk[] Find primary or secondary sources (papers, articles, data).
 \chk[] Serve as a primary source of information or data.
-\chk[] Summarize or extract key points from sources.
+\chk[x] Summarize or extract key points from sources.
 \chk[x] Interpret or explain findings from literature.
 \end{checklist}
 
@@ -639,31 +635,31 @@ I/we have used AI for the following tasks:
 \chk[] Generate initial ideas or hypotheses for experiments or projects.
 \chk[] Propose alternative approaches, solutions, or interpretations.
 \chk[] Suggest research questions or objectives.
-\chk[] Identify potential limitations or challenges.
+\chk[x] Identify potential limitations or challenges.
 \end{checklist}
 
 \textbf{Design of Experiments / Methodology}
 \begin{checklist}
 \chk[] Design experiments or workflows.
-\chk[x] Optimize parameters or settings for experiments.
+\chk[] Optimize parameters or settings for experiments.
 \chk[] Propose control conditions or comparison groups.
-\chk[] Assist with experimental planning or sequencing of tasks.
+\chk[x] Assist with experimental planning or sequencing of tasks.
 \end{checklist}
 
 \textbf{Computer Code / Programming}
 \begin{checklist}
 \chk[x] Debug code or identify errors.
-\chk[] Automate repetitive coding tasks.
-\chk[x] Explain programming concepts, algorithms, or logic.
+\chk[x] Automate repetitive coding tasks.
+\chk[] Explain programming concepts, algorithms, or logic.
 \chk[] Optimize or refactor code for efficiency or readability.
-\chk[] Generate code snippets or full programs.
+\chk[x] Generate code snippets or full programs.
 \end{checklist}
 
 \textbf{Figures, Illustrations, \& Visualizations}
 \begin{checklist}
 \chk[] Propose visual design or layout of figures.
 \chk[] Edit or format images for the report.
-\chk[x] Generate diagrams, schematics, or drawings.
+\chk[] Generate diagrams, schematics, or drawings.
 \chk[x] Create or enhance graphs, plots, or charts.
 \end{checklist}
 
@@ -672,13 +668,13 @@ I/we have used AI for the following tasks:
 \chk[] Process or clean data.
 \chk[] Perform statistical analyses.
 \chk[] Interpret results or trends.
-\chk[] Generate tables or visual summaries of data.
+\chk[x] Generate tables or visual summaries of data.
 \end{checklist}
 
 \textbf{Other Uses of AI}
 \begin{checklist}
 \chk[x] Other (please specify):\\
-Learn LaTeX commands
+Write LaTeX commands
 \end{checklist}
 
 \medskip
