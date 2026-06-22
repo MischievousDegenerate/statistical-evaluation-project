@@ -27,7 +27,7 @@
     \texttt{s250910@dtu.dk} \\
     \And
     Anas Alkaisi\\
-    Artificial Intelligence and Data\\
+    Artificial Intelligence \& Data\\
     DTU \\
     \texttt{s255797@dtu.dk} \\
     \And
@@ -65,11 +65,11 @@ Beyond just measuring how well Gemma scores, we're also interested in what kinds
 \newpage
 
 \section{Introduction}
-The rapid advancement of generative artificial intelligence has raised important questions regarding its impact on education and assessment. Modern AI systems are increasingly capable of solving complex academic tasks, including multiple-choice examination questions, which has led to concerns about academic integrity and the potential misuse of AI during unsupervised assessments. This can be seen in the "Generative AI use and misuse call for assessment reform in higher education"\supercite{chirikov2026genai} article published in Science. According to this article 9\% of undergrad students admit to using AI to cheat. At the same time, locally deployable models have become widely accessible, making it possible for students to run powerful AI systems directly on their personal computers without relying on cloud-based services. Understanding the capabilities and limitations of such models is therefore becoming increasingly relevant for both educators and students.
+The rapid advancement of generative artificial intelligence has raised important questions regarding its impact on education and assessment. Modern AI systems are increasingly capable of solving complex academic tasks, including multiple-choice examination questions, which has led to concerns about academic integrity and the potential misuse of AI during unsupervised and supervised assessments. This can be seen in the "Generative AI use and misuse call for assessment reform in higher education"\supercite{chirikov2026genai} article published in Science. According to this article 9\% of undergrad students admit to using AI to cheat. At the same time, locally deployable models have become widely accessible, making it possible for students to run powerful AI systems directly on their personal computers without relying on cloud-based services. Understanding the capabilities and limitations of such models is therefore becoming increasingly relevant for both educators and students.
 
-Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma-4-e2b on multiple-choice examination sets from the DTU course Introduction to Machine Learning and Data Mining (02450, 02452). Specifically, the study tests whether the model answers fewer questions correctly when a figure or table is shown as an image than when the same information is given as text. This addresses the multimodal evaluation gap described in Section~3.3 (p.~14) of "Sociotechnical Safety Evaluation of Generative AI Systems"\supercite{weidinger2023sociotechnical}. This is done to show the strengths and weaknesses of a locally run open-source model like Gemma, and to find out which kinds of questions are more AI-resistant: those given as text, or those that rely on figures and tables.
+Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma-4-E2B on multiple-choice examination sets from the DTU course Introduction to Machine Learning and Data Mining (02450, 02452). Specifically, the study tests whether the model answers fewer questions correctly when a figure or table is shown as an image than when the same information is given as text. This addresses the multimodal evaluation gap described in Section~3.3 (p.~14) of "Sociotechnical Safety Evaluation of Generative AI Systems"\supercite{weidinger2023sociotechnical}. This is done to show the strengths and weaknesses of a locally run open-source model like Gemma, and to find out which kinds of questions are more AI-resistant: those given as text, or those that rely on figures and tables.
 
-To evaluate the model, Gemma was tested on 16 publicly available examination sets spanning the years 2017–2025. Each exam set contains 27 multiple-choice questions, giving 432 distinct questions in total. A central objective of the study was to compare Gemma's performance on image-based and text-based prompts. For questions containing graphical visualizations, the model was evaluated under two separate conditions. In the first condition, Gemma received a screenshot of the visualization together with the original question text. In the second condition, the visualization was replaced by a detailed textual description generated using Anthropics Fable 5 model, while the original question text remained unchanged. This experimental setup allowed for a direct comparison of the model's ability to interpret graphical information versus equivalent textual descriptions.
+To evaluate the model, Gemma was tested on 16 publicly available examination sets spanning the years 2017–2025. Each exam set contains 27 multiple-choice questions, giving 432 distinct questions in total. A central objective of the study was to compare Gemma's performance on image-based and text-based prompts. For questions containing visualizations, such as tables and matrices, the model was evaluated under two separate conditions. In the first condition, Gemma received a screenshot of the visualization together with the original question text. In the second condition, the visualization was replaced by a detailed textual description generated using Anthropics Fable 5 model, while the original question text remained unchanged. This experimental setup allowed for a direct comparison of the model's ability to interpret graphical information versus equivalent textual descriptions.
 
 The findings of this study provide insight into the practical capabilities of a locally run model like Gemma in an academic setting and contribute to the broader discussion surrounding the role of generative AI in modern education.
 
@@ -112,7 +112,7 @@ The outcome metric in all analyses is accuracy, the proportion of questions answ
 
 To obtain consistent and comparable responses across all questions, the same prompt structure was used throughout the experiment. Each question was submitted to Gemma with an instruction to reason through the problem step by step before providing a final answer. Without this explicit instruction, Gemma wouldn't use chain of thought and it would produce notably worse results. The model was required to end every response with the line \texttt{FINAL ANSWER: X}, where X is one of the answer options A--E. This format allowed the final answer to be extracted automatically from the model output.
 
-To ensure reproducibility, Gemma was run using greedy decoding, meaning that the most likely next token was always selected rather than sampling from a probability distribution. Consequently, repeated evaluations of the same prompt produced identical outputs.
+To ensure reproducibility, Gemma was run using greedy decoding, meaning that the most likely next token was always selected rather than sampling from a probability distribution. Consequently, repeated evaluations of the same prompt would produce identical outputs.
 
 The option E was included in every question as a ``don't know'' option, allowing Gemma to express uncertainty rather than being forced to guess. Since E was never the correct answer for any question, random guessing among the four valid options A--D yields a baseline accuracy of 25\%, which serves as the reference value in the binomial tests.
 
@@ -131,12 +131,11 @@ Unlike closed models such as ChatGPT or Claude, Gemma 4 is released under an Apa
 
 Running the model locally also made it straightforward to ensure statistical independence between observations, as each question could be sent in a completely fresh session with no shared state between calls. This follows the design used to ensure independence in Appendix~C.1 (p.~17) of "Evaluation of Large Language Models: STEM Education and Gender Stereotypes"\supercite{due2024evaluation}.\newline
 
-The Gemma family consists of models of varying size, ranging from 2 to 31 billion parameters. The 2 billion parameter model (Gemma-4-E2B) was chosen so that the study could be reproduced by anyone with a normal computer. It was run on a desktop PC with 16 GB of VRAM. Of that 16 GB it used roughly 10 GB. A typical student laptop, for example a MacBook Air with 16 GB of unified memory, could therefore run it pretty comfortably.
+The Gemma family consists of models of varying size, ranging from 2 to 31 billion parameters. The 2 billion parameter model (Gemma-4-E2B) was chosen so that the study could be reproduced by anyone with a standard computer. It was run on a desktop PC with 16 GB of VRAM. Of that 16 GB it used roughly 10 GB. A typical student laptop, for example a MacBook Air with 16 GB of unified memory, could therefore run it pretty comfortably.
 \newline
 
 Gemma 4 has a knowledge cutoff of January 2025\supercite{gemma4modelcard}, which introduces a potential problem. Any exam set published before this date may have been part of the model's training data, in which case Gemma would not be solving these questions itself, but it would rely on information it has already seen. This problem is known as data contamination, which is discussed as a limitation of benchmarks in Section~8.3 (p.~56) of "Evaluating Large Language Models: A Comprehensive Survey"\supercite{guo2023evaluating}, and would be a huge problem for this study, as it would inflate the accuracy scores of the exams before January 2025. This inflation of accuracy only affects exam sets from before the cutoff, but it doesn't affect exam sets after the cutoff.
 To account for this, we subsequently perform a one-sided two-proportion z-test comparing the success rates on exam sets from before and after January 2025. This test provides evidence as to whether there is a statistically significant difference in performance between the two periods, which may indicate whether the pre-2025 exam material was included in Gemma’s training data.
-
 
 
 \subsection{Statistical methods}
@@ -151,7 +150,7 @@ where $\hat{p}$ is the observed accuracy and $n$ is the number of questions. The
 
 \subsubsection{McNemar's test}
 
-McNemar's test was used to compare performance between the screenshot and text-description modalities for paired questions. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population. We employed the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
+McNemar's test was used to compare performance between the paired text and paired image modalities. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population of the data. This study utilized the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
 
 The McNemar test is used to compare two paired methods when the outcome for each observation is binary (e.g., success or failure). Since both methods are applied to the same set of observations, the results are not independent and therefore cannot be analyzed using a standard two-sample proportion test. 
 
@@ -200,13 +199,13 @@ $$
 b \sim \mathrm{Binomial}(n=b+c, p=0.5).
 $$
 
-For sufficiently large values when ($b+c \ge 25$), the McNemar test statistic
+For sufficiently large values when ($b+c \ge 25$), the McNemar chi-squared approximation test-statistic is used:
 
 $$
 \chi^2=\frac{(b-c)^2}{b+c}
 $$
 
-approximately follows a chi-squared distribution with one degree of freedom under ($H_0$). For smaller samples, a continuity-corrected version known as Edwards' correction,
+which approximately follows a chi-squared distribution with one degree of freedom under ($H_0$). For smaller samples, a continuity-corrected version known as Edwards' correction may be used:
 
 $$
 \chi^2=\frac{(|b-c|-1)^2}{b+c},
@@ -218,20 +217,21 @@ Since this report utilizes the chi-squared approximation method the correspondin
 
 $$p_{value} = P(\chi^2 > \chi^2_{obs})$$
 
-A small $p$-value indicates that the observed imbalance between ($b$) and ($c$) is unlikely to have occurred by chance, providing evidence that one method tends to outperform the other on the paired observations.
+A $p$-value less than our significance level $\alpha$ indicates that the observed imbalance between ($b$) and ($c$) is unlikely to have occurred by chance, providing evidence that one method tends to outperform the other on the paired observations.
 
 \subsubsection{Binomial tests}
 
-This study performs 12 binomial tests in total. 6 of them assess whether Gemma's accuracy exceeded the 25\% baseline expected under random guessing in a four-option multiple-choice setting. The last two of these being full-exam simulations with multiple modalities combined. The other 6 binomial tests assess whether Gemma could pass the exam, i.e. whether its accuracy exceeded the 50\% threshold. The last two of these were also full-exam simulations. \newline 
-For the two full-exam simulations; The first combines the unpaired text, unpaired image and paired-text questions, the second combines the unpaired text, unpaired image and paired-image questions\newline
-All of these were one-sided tests since the purpose was to see how much better Gemma was than the guessing baseline/passing threshold.
+This study considers six different estimated proportions. The first four correspond to the four individual input modalities, while the last two correspond to full-exam simulations that combine multiple input modalities . For each estimated proportion, two one-sided binomial hypothesis tests were conducted, resulting in 12 binomial tests overall. The first test assessed whether Gemma's accuracy exceeded the 25\% baseline expected under random guessing for a four-option multiple-choice exam, whereas the second assessed whether Gemma achieved a passing score by testing whether its accuracy exceeded the 50\% pass threshold.\newline
+Of the two full-exam simulations, the first combined the unpaired-text, unpaired-image, and paired-text questions, while the second combined the unpaired-text, unpaired-image, and paired-image questions. This was done to provide insight into Gemma's performance on full exam sets for the two different prompting strategies for the paired questions.
+\newline
+All of the 12 binomial tests were one-sided tests since the purpose was to see how much better Gemma was than the guessing baseline and passing threshold.
 
-The assumptions of a binomial test are 1) The outcomes should be binary, correct/incorrect, 2) Independent trials, the outcome of one trial shouldn't have an effect on the next one, 3) The probability for correct shouldn't change between trials. All of these assumptions are met in this study, and therefore a binomial test is a suitable test to check if the answers from Gemma are better than random guessing.\newline
+The assumptions of a binomial test are 1) The outcomes should be binary, correct/incorrect, 2) Independent trials, the outcome of one trial shouldn't have an effect on the next one, meaning the probability for correct shouldn't change between trials. All of these assumptions are met in this study, and therefore a binomial test is a suitable test to analyze Gemma's performance.\newline % Måske nævne at der måske ikke er en konsistent proportion for nogle af de forskellige modalities. fx kan det jo være at sværdhedsgraden af unpaired images faktisk er markant forskelligt fra spørgmsål til spørgmsål. Bare mine to c's
 \newline
 The null hypothesis $H_0$ for a one-sided binomial test is $p_0=p$, and the alternative hypothesis $H_1$ is $p_0<p$\newline
 The next step is to calculate the $p$-value. The CDF of a binomial distribution gives the probability of getting at most $x$ successes out of $n$ draws:
 
-$$F(x) = P(X \le x) = \sum_{k=0}^{\lfloor x \rfloor} \binom{n}{k} p_0^{k} (1 - p_0)^{n-k}$$
+$$F(x) = P(X \le x) = \sum_{k=0}^{\lfloor x \rfloor} \binom{n}{k} p_0^{k} (1 - p_0)^{n-k}, \qquad \binom{n}{k} = \frac{n!}{k!(n - k)!}$$
 
 Because the test is one-sided, we need the probability of getting at least as many correct answers as observed, which is the upper tail. The one-tailed p-value is therefore computed as:
 
@@ -251,16 +251,16 @@ This is the significance level we will compare our p-values to in the results se
 
 \subsubsection{Two-proportion z-test}
 
-The two-proportion z-test is used in two places in this study. The first compares Gemma's accuracy on the unpaired text questions (given as text) with the unpaired image questions (given as screenshots), to see whether the format changes how well it does. This is a two-sided test. The second is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
+The first z-test compares Gemma's accuracy on the unpaired-text questions with its accuracy on the unpaired-image questions. A significant difference would indicate that the success proportions differ between the two modalities, although such a difference could be due either to differences in question difficulty or to differences in Gemma's performance on textual and visual inputs. This is a two-sided test. The second z-test is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
 
-The assumptions of a two-proportion z-test are 1) The outcomes should be binary, correct/incorrect, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is the number of successes and failures must both be at least 10 respectively in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test.\newline
+The assumptions of a two-proportion z-test are 1) The outcomes should be binary, 2) The two groups should be independent, the questions in one group have no effect on the questions in the other, 3) The samples should be large enough for the normal approximation to hold, a common rule of thumb is the number of successes and failures must both be at least 10 respectively in each group. All of these assumptions are met in this study, and therefore a two-proportion z-test is a suitable test.\newline
 \newline
 The null hypothesis $H_0$ for the two-sided test is that the two groups have the same true accuracy, $p_1 = p_2$, and the alternative hypothesis $H_1$ is that the accuracies are different, $p_1 \neq p_2$. For the one-sided contamination check (before vs.\ after the knowledge cutoff) the hypotheses are instead directional, $H_0: p_{before} = p_{after}$ against $H_1: p_{before} > p_{after}$, testing specifically whether the pre-cutoff accuracy is inflated by training-data contamination.\newline
-The test statistic is the difference between the two observed accuracies divided by the pooled standard error. Since the null hypothesis says the two accuracies are equal, the standard error is found from a pooled accuracy $\hat{p}$, which is the total number of correct answers in both groups divided by the total number of questions in both groups.
+The test statistic is the difference between the two observed accuracies divided by the pooled standard error. Since the null hypothesis says the two accuracies are equal, the standard error is found from a pooled accuracy $\hat{p}$, which is found as:
 
 $$\hat{p} = \frac{x_1 + x_2}{n_1 + n_2}$$
 
-where $x_1$ and $x_2$ are the number of correct answers and $n_1$ and $n_2$ the number of questions in each group. The pooled test statistic is then:
+where $x_1$ and $x_2$ are the number of correct answers in each group and $n_1$ and $n_2$ are the respective sample sizes. The pooled test statistic is then:
 
 $$z_{obs} = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$$
 
@@ -268,7 +268,7 @@ Under $H_0$ the $z$-statistic follows a standard normal distribution, so the p-v
 
 \subsubsection{Power}
 
-Since the dataset is fixed and numbers of questions can't be increased, the minimum effect-size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed, following the sample-size formula for a difference in independent proportions given in slide~14 of the Day~4 lecture material\supercite{das2026day4}.
+Since the dataset is fixed and the number of questions can't be increased, the minimum effect-size detectable by the z-test at 80\% power and $\alpha = 0.05$ is now computed, following the sample-size formula for a difference in independent proportions given in slide~14 of the Day~4 lecture material\supercite{das2026day4}.
 
 We start from the two-proportion sample-size formula, in which $p_1$ and $p_2$ are the true accuracies of the two groups,
 
@@ -324,14 +324,10 @@ Unpaired text + unpaired image + paired text  & 249 & 432 & 57.6\% & [53.0,\,62.
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- paired shown as image}} \\
 Exams 2017--2024    & 187 & 378 & 49.5\% & [44.4,\,54.5] \\
-Spring 2025         &  17 &  27 & 63.0\% & [44.7,\,81.2] \\
-Fall 2025           &  19 &  27 & 70.4\% & [53.1,\,87.6] \\
 2025 exams combined &  36 &  54 & 66.7\% & [54.1,\,79.2] \\
 \midrule
 \multicolumn{5}{@{}l}{\textit{Accuracy by exam date --- paired shown as text}} \\
 Exams 2017--2024    & 212 & 378 & 56.1\% & [51.1,\,61.1] \\
-Spring 2025         &  18 &  27 & 66.7\% & [48.9,\,84.4] \\
-Fall 2025           &  19 &  27 & 70.4\% & [53.1,\,87.6] \\
 2025 exams combined &  37 &  54 & 68.5\% & [56.1,\,80.9] \\
 \bottomrule
 \end{tabular}
