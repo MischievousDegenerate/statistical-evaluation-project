@@ -78,7 +78,7 @@ The findings of this study provide insight into the practical capabilities of a 
 \section{Methods}
 \subsection{The Dataset}
 
-The dataset employed in this study consists of publicly available examination sets from the DTU course \textit{Introduction to Machine Learning and Data Mining} (02450 and 02452) spanning the years 2017-2025. Both the spring and fall examinations were included, resulting in a total of 16 exam sets. Each examination contains 27 multiple-choice questions, yielding a total sample size of 432 questions. These are real exams used to assess students, and each set is published together with an official solution, which we used as the answer key. Every question has exactly one correct answer, and the exams cover the course curriculum, including data preprocessing, clustering, classification, regression, and model evaluation.
+The dataset employed in this study consists of publicly available examination sets from the DTU course \textit{Introduction to Machine Learning and Data Mining} (02450 and 02452) spanning the years 2017--2025. Both the spring and fall examinations were included, resulting in a total of 16 exam sets. Each examination contains 27 multiple-choice questions, yielding a total sample size of 432 questions. These are real exams used to assess students, and each set is published together with an official solution, which we used as the answer key. Every question has exactly one correct answer, and the exams cover the course curriculum, including data preprocessing, clustering, classification, regression, and model evaluation.
 
 The 432 questions differ in how the information needed to answer them is presented. 141 can be answered from text alone, 157 rely on a figure or plot --- such as a scatter plot, dendrogram, or ROC curve --- that cannot be faithfully written out as text, and the remaining 134 contain a table or matrix of numbers that can be presented either as an image or written out as text. The image versions of all figures and tables were cropped directly from the original exam PDFs.
 
@@ -304,8 +304,7 @@ So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at leas
 The same method was used for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 54$ post-cutoff 2025 questions, so
 $$p_1 - p_2 = (1.645 + 0.84)\sqrt{\frac{0.25 + 0.25}{54}} \approx 0.24.$$
 With only 54 post-cutoff questions the check is therefore only well-powered to detect a large pre-cutoff inflation (about $24$\% or more). The differences actually observed (about $17$\% when the paired questions are scored as images and $12$\% as text) are smaller than this and run the opposite way, so the non-significant result should be read with this limited power in mind.
-
-These minimum detectable effects were computed directly in Python with \texttt{numpy}, using the \texttt{numpy.sqrt} function.
+\texttt{numpy.sqrt} function.
 
 \section{Results}
 
@@ -443,9 +442,7 @@ Unpaired text + unpaired image + paired text   & 57.6\% & $6.0 \times 10^{-47}$ 
 
 \vspace{2ex}
 
-Every modality beats chance, and all six $p$-values against the 25\% baseline are far below the corrected threshold. Against the 50\% passing threshold the formats split along modalities: Gemma passes when the information is text (unpaired text and paired text descriptions) but fails when it is presented as a screenshot. The same split appears in the full-exam simulations, when table questions are shown as screenshots Gemma barely exceeds the passing threshold but not significantly ($p = 0.27$), whereas with text descriptions it passes with $p < 0.001$.
-
-
+All modalities and both full exam simulations outperform random guessing, as all six $p$-values relative to the 25\% baseline are far below the corrected significance threshold. Against the 50\% passing threshold the formats split along modalities: Gemma passes for the two modalities unpaired text and paired text, but fails for unpaired image and paired image. The same pattern is observed in the full exam simulations. For the simulation in which the paired questions are presented as screenshots, Gemma only slightly exceeds the 50\% baseline. Since the corresponding $p$-value is $0.27$, the null hypothesis cannot be rejected, and there is insufficient evidence to conclude that Gemma performs above the 50\% threshold in this format. In contrast, when the paired questions are presented as text, the success rate increases to $57.6\%$. The corresponding $p$-value is below the significance level, indicating that the result is statistically significant, providing evidence that Gemma performs above the 50\% baseline in this setting.
 
 
 
@@ -470,43 +467,220 @@ Pre/post-cutoff, paired as text (one-sided)  & 56.1\% vs. 68.5\% & $-1.73$ & $0.
 
 Gemma was far more accurate on unpaired text questions (73.8\%, $n = 141$) than on screenshots (37.6\%, $n = 157$), a highly significant 36 percentage point gap.
 
-For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams, counting each question once. The result runs opposite to what contamination would predict regardless of how the paired questions are scored: Gemma was more accurate on the clean 2025 exams than on the older ones both when the paired questions are shown as images (66.7\% vs.\ 49.5\%) and as text (68.5\% vs.\ 56.1\%). Since the clean exams scored higher either way, there is no evidence that training-data memorisation is inflating the results.
+For the contamination check, a one-sided test compared pre-cutoff (2017--2024) accuracy against post-2025 accuracy, with each question counted once. The results run counter to what would be expected under data contamination, regardless of how the paired questions are prompted. Gemma achieved higher accuracy on the post-2025 exams than on the earlier exams both when the paired questions are presented as images (66.7\% vs.\ 49.5\%) and as text (68.5\% vs.\ 56.1\%). Since performance is consistently higher on the 2025 exams in both conditions, there is no evidence that training-data memorization is inflating the results.
 
 
 \section{Discussion}
-However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
 
 
 
 \subsection{Interpretation of the results}
-The clearest result in this study is the paired McNemar test. The same questions were shown to Gemma in two ways: once with the figure or table written out as text, and once as a screenshot. Gemma answered 64.2\% of these correctly when the information was given as text, but only 44.8\% when it was given as an image ($p = 8.9 \times 10^{-5}$), a drop of about 19 percentage points. Because the question is exactly the same in both cases and only the format changes, this gap cannot be explained by some questions simply being harder than others. It is the image format itself that makes Gemma worse, and this is the clearest evidence for the research question.
+The McNemar test is the result that matters most here, and the reason is simple. 
+It is the only comparison in this study where question difficulty is not in play. 
+The same 134 questions were answered in both formats, so the 19 percentage point 
+drop from text to image cannot be explained by figure questions simply being 
+harder. The format itself is what causes the difference. That also makes it easier to read the binomial results. Gemma passes the 50\% 
+threshold when information is given as text, and fails when it is shown as an 
+image. The natural question is why, and the answer does not seem to be that 
+Gemma lacks machine learning knowledge. When you give it the same table written 
+out as text it can usually reason about the content correctly. It knows what a 
+correlation matrix is, it can identify the right value and it can follow the logic 
+of the question. The problem is extracting that information from an image. A 
+model this size running locally will often misread numbers, confuse rows, or 
+lose precision when it has to pull values off a screenshot rather than receive 
+them as text.
 
-At the same time, Gemma is clearly not just guessing. In every format it scored well above the 25\% you would expect from random guessing, so it does read the questions and get real information out of them. The formats only split apart at the 50\% passing mark: Gemma passes when the information is given as text (the unpaired text questions, and the paired questions shown as text) but fails when the same information is shown as an image. Whether Gemma would pass a full exam therefore depends a lot on how many of the questions rely on figures and tables.
+The unpaired z-test comparing text questions (73.8\%) to image questions (37.6\%) 
+looks significant, but it is harder to interpret because these are different 
+questions. Figure-based questions tend to be harder regardless of how they are 
+presented, so some of that gap is probably difficulty rather than modality. The 
+McNemar result is more convincing precisely because it controls for this.
 
-The unpaired comparison between the unpaired text questions (73.8\%) and the unpaired image questions (37.6\%) points the same way, but it is weaker evidence. These are different questions, so it is not clear whether the gap comes from the image format or just from those questions being harder. That is why the McNemar test is the main result and the z-test only backs it up.
-
-A further concern was that Gemma might be remembering exams it had seen during training, since most of them are older than its knowledge cutoff. The contamination check shows this is not the case. Gemma actually did a little better on the two clean 2025 exams than on the older ones, which is the opposite of what would be expected if it was relying on memorised answers. This increases confidence that the format effect is real and not just a side effect of the training data.
-
-It is worth asking why the image format hurts so much. Since Gemma answers correctly when the same numbers and labels are given as text, the problem does not seem to be its machine learning knowledge or its ability to reason about the question. The weak point is reading the information out of the image in the first place. In other words, the bottleneck is visual perception rather than reasoning: once the model is handed the numbers it can use them, but a small model like Gemma-4-E2B often fails to pull those numbers out of a figure or table correctly. This also fits the wider point that multimodal systems are still under-evaluated and tend to be weaker on non-text inputs.
+The contamination check was worth running given that most of the exams predate 
+Gemma's training cutoff. If the model had seen these questions before, you would 
+expect it to score higher on the older material. Instead it scored slightly 
+better on the two 2025 exams it could not have seen which is the wrong direction for 
+contamination. That does not rule it out on individual questions, but at the 
+level of overall performance it is not something to worry about.
 
 \subsection{Limitations}
-The study has several limitations. The most important one is that the unpaired text-versus-image comparison mixes two things together: the format and how hard the questions are. Only the paired McNemar test really separates them. On top of that, the paired set is mostly tables and matrices and contains only a few real figures, so strictly speaking the main result is about reading tables as images rather than figures in general. The geometric figures, like scatter plots and dendrograms, only appear in the weaker, confounded z-test.
+The most significant limitation is one that runs through the whole study which is the 
+unpaired text and image questions are not the same questions, so any difference 
+between them could reflect difficulty as much as modality. The McNemar test 
+sidesteps this, but it only covers tables and matrices, the paired set contains 
+very few actual figures. Scatter plots, dendrograms, ROC curves: these only 
+appear in the confounded unpaired comparison, so strictly speaking the main 
+result applies to reading tables as images, not figures in general. The text descriptions used in the paired-text condition were generated by another 
+AI model rather than written by hand. This matters because a well-written 
+description might make the question genuinely easier to answer, not just easier 
+to read. Some of Gemma's higher accuracy on paired-text questions could therefore 
+reflect the quality of the description rather than a pure advantage of text over 
+images. It is difficult to separate the two.
 
-Another limitation is that the text versions of the figures and tables were generated automatically by another model (Claude's Fable 5) rather than written by hand. So part of Gemma's higher score on the text version could come from a clear, easy-to-read description, and not only from text being easier than an image. The study also uses a single course (02450) and a single model at one size (Gemma-4-E2B), so the same results cannot be assumed to hold for other subjects, other models, or larger versions of Gemma. In particular, larger or cloud-based models with stronger vision could close the gap, so the weakness found here is specific to a small model that can be run locally.
+The study also only tests one model at one size, on one course. A larger version 
+of Gemma, or a cloud-based model with a stronger vision component, might perform 
+quite differently on the image questions. The weakness identified here is real, 
+but it is specific to small, locally-run models, and it would be wrong to 
+generalise the numbers to AI systems in general.
 
-Finally, the contamination check is based on only two clean exams, so it is not very powerful. With this little data it could only have detected a fairly large difference (around 24 percentage points), so the non-significant result does not prove there is no contamination, it only means none was found. All 432 questions are also treated as independent. This is reasonable for the model, since each question was answered in a fresh session with no shared memory, but questions from the same exam could still be linked through that exam being easy or hard. This does not affect the McNemar test, but it could have a small effect on the z-test and the binomial tests.
+Two smaller points are worth noting. The contamination check rests on only two 
+clean exam sets, which means it could only reliably detect a very large 
+difference in performance — around 24 percentage points or more. A subtler 
+contamination effect would have gone undetected. And although each question was 
+sent to Gemma in a fresh session, questions from the same exam are not fully 
+independent: an unusually hard or easy exam will shift all of its questions in 
+the same direction. This does not affect the McNemar test, but it could slightly 
+distort the binomial tests and the z-test.
 
 \subsection{Implications for exam design}
-These results have a practical use for how universities design exams, especially exams taken at home or that are otherwise hard to supervise. A locally run open model is good at plain text multiple-choice questions, so an exam made only of text questions is easy to answer with free AI that any student can run on a normal laptop. Questions that depend on reading a figure, a plot, a diagram, or a table are much harder for such a model, so including more of these makes an exam more resistant to this kind of AI use. In practice an exam can be made harder to cheat on not by changing the topic, but simply by presenting the information visually instead of as text.
+The introduction to this paper cited a study finding that 9\% of undergraduate 
+students admit to using AI to cheat\supercite{chirikov2026genai}. The results 
+here suggest that the risk is unevenly distributed across question types. A 
+multiple-choice exam made entirely of text-based questions is one that a model 
+small enough to run on a student laptop can pass. An exam that relies heavily on 
+figures and tables presented as images is considerably harder for the same model 
+to get through.
 
-This protection is not complete. It is strongest against small, free, locally-run models like the one tested here; a student using a larger cloud model with better vision might still answer figure questions correctly. Figure- and table-based questions therefore raise the bar rather than fully closing the door. They are also a moving target: as open multimodal models keep getting better at reading images, this gap is likely to shrink, so exam design cannot rely on it forever. For now, leaning on visual questions is a simple and cheap way to make assessments more robust against the locally-run models that are currently within easy reach of students.
+This does not require changing what an exam tests. The machine learning content 
+can stay the same; what changes is whether the information is handed to the model 
+as text or whether it has to be read off an image. For questions involving 
+correlation matrices, confusion tables, or any other numerical data, showing the 
+image rather than typing out the values appears to be enough to push a locally 
+run open model below the passing threshold.
+
+The caveat is that this protection is model-size dependent. A student with access 
+to a larger cloud-based model might still get figure questions right. And as 
+open-source vision models continue to improve, the gap will likely narrow. What 
+works now may not work in two years. These findings are best understood as a 
+snapshot of where small open models currently stand, not as a permanent 
+structural feature of AI and visual information.
 \section{Conclusion}
 
-This study tested whether the open model Gemma-4-E2B does worse on machine learning exam questions when a figure or table is shown as an image instead of as text. The answer is yes. On the same questions, Gemma dropped from 64.2\% correct with a text description to 44.8\% with an image, a significant drop of about 19 percentage points. It still beats random guessing in every format, but it only passes the 50\% mark when the information is given as text. A contamination check found no sign that Gemma was simply remembering old exams, since it did slightly better on the newest exams that it cannot have seen. A locally run open model like Gemma is therefore genuinely useful for text questions but clearly struggles with figures and tables presented as images. For universities, this points to a simple way to make take-home exams more resistant to AI: rely more on questions that require reading a figure or a table.
+
+The main finding is straightforward. Gemma-4-E2B is noticeably worse at exam 
+questions when it has to look at a figure or table rather than read it as text. 
+On the paired questions, where the question itself stays the same and only 
+the format changes accuracy dropped from 64.2\% with a text description to 
+44.8\% with a screenshot. That 19 percentage point gap is hard to explain away, 
+and the McNemar test confirms it is not just noise.
+
+What is perhaps more interesting is what this tells us about why the 
+model struggles. It is not that Gemma does not understand machine learning. When 
+you hand it the same numbers written out as text, it can usually do something 
+sensible with them. The problem is reading those numbers off an image in the 
+first place. That is a much more specific weakness than people tend to assume 
+when they worry about AI and exams. The contamination check did not find any sign that Gemma was coasting on 
+memorised answers from old exams. If anything, it did slightly better on the 
+2025 exams it could not have seen during training, which is the wrong direction 
+for contamination to show up. So the results are probably measuring genuine 
+performance rather than recall.
+
+Some red flags are worth keeping in mind. This is one model, one course, and the 
+text descriptions of figures were written by another AI, not by hand, so 
+Gemma may have had an unusually clean version to read. Larger models with better 
+vision will likely close the gap over time. But for a model small enough to run 
+on a student laptop, the weakness is real and fairly large. The practical upshot for exam design is simple: questions that require reading a 
+figure or a table are considerably harder for this kind of model than plain text 
+questions. That does not mean they are AI-proof, but they do raise the bar in a 
+way that does not require redesigning the entire exam.
+
 
 \printbibliography[]
 
+\vfill % Pushes the declaration to the bottom of the page if there is space
 
+\section*{Declaration of AI use}
+
+% Instructions
+% --------------------------------------------------------------------------------
+% Please check all items where you have used any form of generative AI
+% to assist you. Be honest and specific—this helps us ensure academic
+% integrity and proper acknowledgment.
+% Check items by writing an "x" in the \chk[] command, i.e. \chk[x]
+
+{ % BEGINNING OF AI DECLARATION
+\small
+\setlength{\parindent}{0pt}
+I/we have used AI for the following tasks:
+
+\medskip
+\textbf{Writing / Text Generation}
+\begin{checklist}
+\chk[] Rephrase or improve wording, grammar, or style.
+\chk[] Summarize external sources or content.
+\chk[] Check or enhance logical flow or structure of the report.
+\chk[] Draft sections of the report.
+\end{checklist}
+
+\textbf{Research \& Information Gathering}
+\begin{checklist}
+\chk[x] Find primary or secondary sources (papers, articles, data).
+\chk[] Serve as a primary source of information or data.
+\chk[] Summarize or extract key points from sources.
+\chk[x] Interpret or explain findings from literature.
+\end{checklist}
+
+\textbf{Idea Generation / Brainstorming}
+\begin{checklist}
+\chk[] Generate initial ideas or hypotheses for experiments or projects.
+\chk[] Propose alternative approaches, solutions, or interpretations.
+\chk[] Suggest research questions or objectives.
+\chk[] Identify potential limitations or challenges.
+\end{checklist}
+
+\textbf{Design of Experiments / Methodology}
+\begin{checklist}
+\chk[] Design experiments or workflows.
+\chk[x] Optimize parameters or settings for experiments.
+\chk[] Propose control conditions or comparison groups.
+\chk[] Assist with experimental planning or sequencing of tasks.
+\end{checklist}
+
+\textbf{Computer Code / Programming}
+\begin{checklist}
+\chk[x] Debug code or identify errors.
+\chk[] Automate repetitive coding tasks.
+\chk[x] Explain programming concepts, algorithms, or logic.
+\chk[] Optimize or refactor code for efficiency or readability.
+\chk[] Generate code snippets or full programs.
+\end{checklist}
+
+\textbf{Figures, Illustrations, \& Visualizations}
+\begin{checklist}
+\chk[] Propose visual design or layout of figures.
+\chk[] Edit or format images for the report.
+\chk[x] Generate diagrams, schematics, or drawings.
+\chk[x] Create or enhance graphs, plots, or charts.
+\end{checklist}
+
+\textbf{Data Analysis \& Interpretation}
+\begin{checklist}
+\chk[] Process or clean data.
+\chk[] Perform statistical analyses.
+\chk[] Interpret results or trends.
+\chk[] Generate tables or visual summaries of data.
+\end{checklist}
+
+\textbf{Other Uses of AI}
+\begin{checklist}
+\chk[x] Other (please specify):\\
+Learn LaTeX commands
+\end{checklist}
+
+\medskip
+\textbf{Confirmation of No Inappropriate Use}
+\begin{checklist}
+\chk[x] I have not submitted AI-generated work as entirely my own without disclosure.
+\chk[x] I have not used AI to fabricate or invent data, results, or references.
+\chk[x] I have not used AI to plagiarize or copy others’ work without correct attribution.
+\chk[x] I have not used AI to violate copyright, GDPR, or confidentiality requirements.
+\chk[x] I have not used AI to bypass safety, ethical, or legal guidelines related to the project.
+\end{checklist}
+
+\paragraph{Declaration} I confirm that the above accurately reflects my use of generative AI in this report. I understand that failure to disclose AI use may be considered a breach of academic integrity.
+
+% \onecolumn % Commented out to prevent accidental page breaks. Delete the '%' if you explicitly need a column reset here.
+}
 
 \section*{Appendix}
 
@@ -531,4 +705,35 @@ This study tested whether the open model Gemma-4-E2B does worse on machine learn
     \label{fig:typeC}
 \end{figure}
 
+
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.60\linewidth]{}
+    \caption{Paired image example --- the confusion matrix as shown to Gemma 
+    in the \textit{paired image} condition.}
+    \label{fig:typeCimage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/Type C text.png}
+    \caption{Paired text example --- the same question as above, but the 
+    confusion matrix replaced by a textual description generated by Claude's 
+    Fable 5, as used in the \textit{paired text} condition.}
+    \label{fig:typeCtext}
+\end{figure}
+
+
+
+
+
+
+
+
+
 \end{document}
+
+
