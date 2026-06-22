@@ -306,7 +306,7 @@ With only 54 post-cutoff questions the check is therefore only well-powered to d
 
 \begin{table}[H]
 \centering
-\caption{Accuracy of the Gemma~4 run, with each question counted once. Each exam contains 27 distinct questions; the paired (figure/table) questions are shown either as an image or as a text description, so the full-exam totals and the by-date rows are reported under both presentations. The 134 paired questions are listed once under \emph{Paired text} and once under \emph{Paired image}, so the four input-format rows overlap and do not sum to the full-exam total ($432 = 141 + 157 + 134$). Accuracy is $n_{correct}/n_{total}$; 95\% confidence intervals use the normal approximation.}
+\caption{Accuracy of the Gemma~4 run, with each question counted once. Each exam contains 27 distinct questions; the paired (figure/table) questions are shown either as an image or as a text description, so the full-exam totals and the by-date rows are reported under both presentations. The 134 paired questions are listed once under \emph{Paired text} and once under \emph{Paired image}, so the total number of exam questions is $432 = 141 + 157 + 134$. Accuracy is $n_{correct}/n_{total}$; 95\% confidence intervals use the normal approximation.}
 \label{tab:accuracy-ci}
 \begin{tabular}{lrrrr}
 \toprule
@@ -374,7 +374,7 @@ The paired image method correctly answered 9 questions that the paired text meth
 
 The total number of discordant pairs is therefore
 \[
-b + c = 9 + 35 = 44.
+b + c = 9 + 35 = 44
 \]
 
 McNemar’s test is based solely on these discordant pairs. The corresponding empirical proportions are:
@@ -406,7 +406,7 @@ With one degree of freedom, this corresponds to a \(p\)-value of approximately:
 p_{value} = P(\chi^2 > \chi^2_{obs}) =8.9 \times 10^{-5}
 \]
 
-Since the $p_{value}$ is considerably smaller than the significance level of \(\alpha = 0.05\), the null hypothesis is rejected. This provides strong evidence that the two prompting methods do not perform equally. Furthermore, the paired text method was correct on 35 of the 44 discordant questions, whereas the paired image method was correct on only 9. Therefore, the results suggest that the paired text prompting method significantly outperformed the paired image prompting method on this dataset.
+Since the $p$-value is substantially smaller than the significance level $\alpha = 0.05$, there is strong evidence against the null hypothesis, leading to its rejection. This provides solid evidence that the two prompting methods do not perform equally. Therefore, the results suggest that the paired text prompting method significantly outperformed the paired image prompting method on this dataset.
 
 
 \subsection{Binomial tests}
@@ -425,8 +425,8 @@ Paired text       & 64.2\% & $1.4 \times 10^{-21}$ & Yes & $6.5 \times 10^{-4}$ 
 Paired image & 44.8\% & $5.1 \times 10^{-7}$  & Yes & $0.90$               & No  \\
 \midrule
 \multicolumn{6}{@{}l}{\textit{Full-exam simulation}} \\
-Unpaired text + unpaired image + paired (image)  & 51.6\% & $2.1 \times 10^{-32}$ & Yes & $0.27$               & No  \\
-Unpaired text + unpaired image + paired (text)   & 57.6\% & $6.0 \times 10^{-47}$ & Yes & $8.7 \times 10^{-4}$ & Yes \\
+Unpaired text + unpaired image + paired image  & 51.6\% & $2.1 \times 10^{-32}$ & Yes & $0.27$               & No  \\
+Unpaired text + unpaired image + paired text   & 57.6\% & $6.0 \times 10^{-47}$ & Yes & $8.7 \times 10^{-4}$ & Yes \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -458,12 +458,15 @@ Pre/post-cutoff, paired as text (one-sided)  & 56.1\% vs. 68.5\% & $-1.73$ & $0.
 
 \vspace{2ex}
 
-Gemma was far more accurate on unpaired text questions (73.8\%, $n = 141$) than on screenshots (37.6\%, $n = 157$), a highly significant 36 percentage point gap. However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
+Gemma was far more accurate on unpaired text questions (73.8\%, $n = 141$) than on screenshots (37.6\%, $n = 157$), a highly significant 36 percentage point gap.
 
-For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams, counting each question once. The result runs opposite to what contamination would predict regardless of how the paired questions are scored: Gemma was more accurate on the clean 2025 exams than on the older ones both when the paired questions are shown as images (66.7\% vs.\ 49.5\%) and as text (68.5\% vs.\ 56.1\%). Since the clean exams scored \emph{higher} either way, there is no evidence that training-data memorisation is inflating the results.
+For the contamination check, the one-sided test compared pre-cutoff (2017--2024) accuracy against the two 2025 exams, counting each question once. The result runs opposite to what contamination would predict regardless of how the paired questions are scored: Gemma was more accurate on the clean 2025 exams than on the older ones both when the paired questions are shown as images (66.7\% vs.\ 49.5\%) and as text (68.5\% vs.\ 56.1\%). Since the clean exams scored higher either way, there is no evidence that training-data memorisation is inflating the results.
 
 
 \section{Discussion}
+However, since the two groups consist of different questions, question difficulty is confounded with modality, so this comparison cannot tell us whether the image rendering itself causes the gap; that is what the paired McNemar test addresses.
+
+
 
 \subsection{Interpretation of the results}
 The clearest result in this study is the paired McNemar test. The same questions were shown to Gemma in two ways: once with the figure or table written out as text, and once as a screenshot. Gemma answered 64.2\% of these correctly when the information was given as text, but only 44.8\% when it was given as an image ($p = 8.9 \times 10^{-5}$), a drop of about 19 percentage points. Because the question is exactly the same in both cases and only the format changes, this gap cannot be explained by some questions simply being harder than others. It is the image format itself that makes Gemma worse, and this is the clearest evidence for the research question.
