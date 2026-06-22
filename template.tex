@@ -148,6 +148,8 @@ $$\hat{p} \pm 1.96\sqrt{\frac{\hat{p}(1-\hat{p})}{n}},$$
 
 where $\hat{p}$ is the observed accuracy and $n$ is the number of questions. The value $1.96$ is the $97.5\%$ quantile of the standard normal distribution. The test is valid if $np > 15$ and $n(1-p) > 15$; that is, the expected numbers of successes and failures must each be greater than $15$.
 
+These intervals were computed in Python using the \texttt{proportion\_confint} function from \texttt{statsmodels}.
+
 \subsubsection{McNemar's test}
 
 McNemar's test was used to compare performance between the paired text and paired image modalities. Since the same questions were evaluated under both conditions, the resulting observations are paired, making McNemar's test an appropriate choice. Furthermore, the model output is binary (success/failure), corresponding to nominal data, which satisfies one of the assumptions of the test. McNemar's test is also a non-parametric procedure, meaning that it does not rely on distributional assumptions regarding the underlying population of the data. This study utilized the chi-squared approximation version of the test, as described in Section 4.3 of "Model Evaluation, Model Selection, and Algorithm Selection in Machine Learning"\supercite{raschka2018model}
@@ -219,6 +221,8 @@ $$p_{value} = P(\chi^2 > \chi^2_{obs})$$
 
 A $p$-value less than our significance level $\alpha$ indicates that the observed imbalance between ($b$) and ($c$) is unlikely to have occurred by chance, providing evidence that one method tends to outperform the other on the paired observations.
 
+This test was computed in Python using the \texttt{mcnemar} function from \texttt{statsmodels}, with \texttt{exact=False} and \texttt{correction=False} selecting the chi-squared approximation without continuity correction.
+
 \subsubsection{Binomial tests}
 
 This study considers six different estimated proportions. The first four correspond to the four individual input modalities, while the last two correspond to full-exam simulations that combine multiple input modalities . For each estimated proportion, two one-sided binomial hypothesis tests were conducted, resulting in 12 binomial tests overall. The first test assessed whether Gemma's accuracy exceeded the 25\% baseline expected under random guessing for a four-option multiple-choice exam, whereas the second assessed whether Gemma achieved a passing score by testing whether its accuracy exceeded the 50\% pass threshold.\newline
@@ -249,6 +253,8 @@ divides the significance threshold by the number of tests in the family:
 
 This is the significance level we will compare our p-values to in the results section. Noteworthy, the Bonferroni method greatly reduces false positives (Type I errors) but increases the risk of missing true effects (Type II errors).
 
+These tests were computed in Python using the \texttt{binomtest} function from \texttt{scipy}, with \texttt{alternative='greater'} for the one-sided tests.
+
 \subsubsection{Two-proportion z-test}
 
 The first z-test compares Gemma's accuracy on the unpaired-text questions with its accuracy on the unpaired-image questions. A significant difference would indicate that the success proportions differ between the two modalities, although such a difference could be due either to differences in question difficulty or to differences in Gemma's performance on textual and visual inputs. This is a two-sided test. The second z-test is a contamination check, which compares Gemma's accuracy on questions from before and after the model's knowledge cutoff, to see whether performance differs between the two time periods. This is done as a one-sided test.
@@ -265,6 +271,8 @@ where $x_1$ and $x_2$ are the number of correct answers in each group and $n_1$ 
 $$z_{obs} = \frac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$$
 
 Under $H_0$ the $z$-statistic follows a standard normal distribution, so the p-value can be found from it and compared to the significance level $\alpha = 0.05$.
+
+These tests were computed in Python using the \texttt{proportions\_ztest} function from \texttt{statsmodels}.
 
 \subsubsection{Power}
 
@@ -296,6 +304,8 @@ So with this fixed $n$ the test can detect a true accuracy gap of $17$\% at leas
 The same method was used for the contamination check. That test is one-sided (so $Z_{\alpha} = 1.645$) and its smaller group is the $n = 54$ post-cutoff 2025 questions, so
 $$p_1 - p_2 = (1.645 + 0.84)\sqrt{\frac{0.25 + 0.25}{54}} \approx 0.24.$$
 With only 54 post-cutoff questions the check is therefore only well-powered to detect a large pre-cutoff inflation (about $24$\% or more). The differences actually observed (about $17$\% when the paired questions are scored as images and $12$\% as text) are smaller than this and run the opposite way, so the non-significant result should be read with this limited power in mind.
+
+These minimum detectable effects were computed directly in Python with \texttt{numpy}, using the \texttt{numpy.sqrt} function.
 
 \section{Results}
 
