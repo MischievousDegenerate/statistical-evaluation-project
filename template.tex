@@ -105,7 +105,8 @@ to diminish as open-source vision capabilities continue to improve.
 \textbf{Rune Christensen} (s250910): [describe contribution]. \\
 \textbf{Anas Alkaisi} (s255797): [describe contribution]. \\
 \textbf{Frederik Naervig Gerlach-Hansen} (s256931): [describe contribution].\par}
-
+\newline
+\textbf{Github link:} https://github.com/frederikngh/02445-gemma-evaluation
 
 
 \newpage
@@ -115,7 +116,7 @@ The rapid advancement of generative artificial intelligence has raised important
 
 Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma-4-E2B on multiple-choice examination sets from the DTU course Introduction to Machine Learning and Data Mining (02450, 02452). Specifically, the study tests whether the model answers fewer questions correctly when a figure or table is shown as an image than when the same information is given as text. This addresses the multimodal evaluation gap described in Section~3.3 (p.~14) of "Sociotechnical Safety Evaluation of Generative AI Systems"\supercite{weidinger2023sociotechnical}. This is done to show the strengths and weaknesses of a locally run open-source model like Gemma, and to find out which kinds of questions are more AI-resistant: those given as text, or those that rely on figures and tables.
 
-To evaluate the model, Gemma was tested on 16 publicly available examination sets spanning the years 2017–2025. Each exam set contains 27 multiple-choice questions, giving 432 distinct questions in total. A central objective of the study was to compare Gemma's performance on image-based and text-based prompts. For questions containing visualizations, such as tables and matrices, the model was evaluated under two separate conditions. In the first condition, Gemma received a screenshot of the visualization together with the original question text. In the second condition, the visualization was replaced by a detailed textual description generated using Anthropics Fable 5 model, while the original question text remained unchanged. This experimental setup allowed for a direct comparison of the model's ability to interpret graphical information versus equivalent textual descriptions.
+To evaluate the model, Gemma was tested on 16 publicly available examination sets spanning the years 2017–2025. A central objective of the study was to compare Gemma's performance on image-based and text-based prompts. For questions containing visualizations, such as tables and matrices, the model was evaluated under two separate conditions. In the first condition, Gemma received a screenshot of the visualization together with the original question text. In the second condition, the visualization was replaced by a detailed textual description generated using Anthropics Fable 5 model, while the original question text remained unchanged. This experimental setup allowed for a direct comparison of the model's ability to interpret graphical information versus equivalent textual descriptions.
 
 The findings of this study provide insight into the practical capabilities of a locally run model like Gemma in an academic setting and contribute to the broader discussion surrounding the role of generative AI in modern education.
 
@@ -570,15 +571,8 @@ difficulty, or some combination of both. The McNemar test avoids this problem
 entirely by holding the question constant, which is why it is treated as the 
 primary result.
 
-The contamination check was included because most of the exam sets predate 
-Gemma's training cutoff of January 2025, raising the possibility that the model 
-had encountered some of these questions during training. The results do not 
-support this concern: Gemma performed slightly better on the two 2025 exam sets 
-it could not have seen than on the older material, which is the opposite of what 
-would be expected if memorisation were inflating the scores. While this does not 
-conclusively rule out contamination on individual questions, it suggests that 
-the observed performance differences reflect genuine model behaviour rather than 
-recall.
+The contamination check was included because most of the exam sets predate Gemma's January 2025 training cutoff, raising the possibility that some questions had been encountered during training. However, Gemma performed slightly better on the two 2025 exam sets than on the pre-2025 sets, which is opposite to what would be expected if memorization were artificially inflating performance. It is important to note that the post-2025 exam sets contained substantially fewer questions than the pre-2025 sets. This imbalance reduces the power of the hypothesis test, making it more difficult to detect a true difference between the two groups. Consequently, while the contamination analysis cannot conclusively rule out contamination at the level of individual questions, the results suggest that the observed performance reflects genuine model capabilities rather than simple recall.
+
 
 
 \subsection{Limitations}
