@@ -142,7 +142,7 @@ The objective of the experiment was to evaluate Gemma's ability to answer multip
     \end{itemize}
     \item \textbf{Paired questions}: the question contains information that can be given both as text and as a screenshot, e.g. a matrix, vector, or table.
     \begin{itemize}
-        \item \textbf{Paired text}: the visual element was first converted into a detailed textual description using Claude's Fable 5. Gemma received this description together with the original question text and answer options.
+        \item \textbf{Paired text}: the visual element was first converted into a textual description using Anthropic's Fable 5. Gemma received this description together with the original question text and answer options.
         \item \textbf{Paired image}: Gemma received the original question text, answer options, and a screenshot of the associated visual element.
     \end{itemize}
 \end{itemize}
@@ -296,7 +296,7 @@ Since each family contains six binomial tests asking the same question, there is
 
 This is the significance level we will compare our p-values to in the results section. Noteworthy, the Bonferroni method greatly reduces false positives (Type 1 errors) but increases the risk of missing true effects (Type 2 errors).
 
-A possible problem might occur in that some of the binomial tests are dependent. If the accuracy for an input modality is high, the full exam simulation will also be high. This could be a problem since, according to the Day 2 slides\supercite{das2026day2}, Bonferroni assumes that the tests are independent. This independence is only needed if you want the family-wise error rate (FWER) to be roughly equal to $\alpha$, so $FWER \approx \alpha$. Since our binomial tests are not fully independent, FWER won't be roughly equal to $\alpha$. This means that we do not know our exact FWER. But since the FWER is the probability of getting one or more Type 1 errors, and dependence makes the Type 1 errors come in groups, so that either many happen at once or none happen, the FWER goes down as the positive dependence goes up. This happens because there are more scenarios where no type 1 error occur when the proportions are positively dependent. In other words, when the tests are positively dependent there are more scenarios where no Type 1 error happens than when they are independent. Applying Bonferroni therefore keeps $FWER \le \alpha$, so the true FWER becomes a bit lower than alpha, meaning that the probability of making a Type 1 error decreases. 
+A possible problem might occur in that some of the binomial tests are dependent. If the accuracy for an input modality is high, the full exam simulation will also be high. This could be a problem since, according to the Day 2 slides\supercite{das2026day2}, Bonferroni assumes that the tests are independent. This independence is only needed if you want the family-wise error rate (FWER) to be roughly equal to $\alpha$, so $FWER \approx \alpha$. Since our binomial tests are not fully independent, FWER won't be roughly equal to $\alpha$. This means that we do not know our exact FWER. But since the FWER is the probability of getting one or more Type 1 errors, and dependence makes the Type 1 errors come in groups, so that either many happen at once or none happen, the FWER goes down as the positive dependence goes up. In other words, when the tests are positively dependent there are more scenarios where no Type 1 error happens than when they are independent. Applying Bonferroni therefore keeps $FWER \le \alpha$, so the true FWER becomes a bit lower than alpha, meaning that the probability of making a Type 1 error decreases. 
 
 In this study a Type 1 error is worse than a Type 2 error. A Type 1 error would mean telling the course staff that figure and table questions are much more resistant to the model than they really are. This would give them a false sense of security and make them trust an exam format that does not actually stop students from using AI. A Type 2 error would only mean failing to spot a real difference between the modalities, therefore advising the staff to leave the exam sets as they are. Acting on a Type 1 error would therefore mean asking the Machine learning staff to change the entire exam format, when it shouldn't be changed. A Type 2 error would tell the Machine learning staff to leave the exam sets as they are. A Type 1 error is way more work and has bigger consequences for the Machine learning staff. It is clear why this study would rather make Type 2 errors than Type 1 errors.
 \newline
@@ -576,8 +576,7 @@ The contamination check was included because most of the exam sets predate Gemma
 
 
 \subsection{Limitations}
-The most significant limitation is one that runs through the whole study which is the 
-unpaired text and image questions are not the same questions, so any difference 
+A significant limitation of this study are the comparisons of the unpaired text and image questions as they are independent questions same questions, so any difference 
 between them could reflect difficulty as much as modality. The McNemar test 
 sidesteps this, but it only covers tables and matrices, the paired set contains 
 very few actual figures. Scatter plots, dendrograms, ROC curves: these only 
