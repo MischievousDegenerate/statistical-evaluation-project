@@ -100,25 +100,13 @@ to diminish as open-source vision capabilities continue to improve.
 
 \end{abstract}
 
-\section*{Author contributions}
-{\small\noindent
-\textbf{Rune Christensen} (s250910): [describe contribution]. \\
-\textbf{Anas Alkaisi} (s255797): Contributed to the writing and editing of the 
-report, including the abstract, the prompting strategy section, the methods 
-section on the Gemma model, the discussion (sections 4.1--4.3), and the 
-conclusion. Produced data visualisations, including the accuracy bar charts 
-summarising results across all input modalities. \\
-\textbf{Frederik Naervig Gerlach-Hansen} (s256931): [describe contribution].\par}
-\newline
-\textbf{Github link:} https://github.com/frederikngh/02445-gemma-evaluation
-
 
 \newpage
 
 \section{Introduction}
 The rapid advancement of generative artificial intelligence has raised important questions regarding its impact on education and assessment. Modern AI systems are increasingly capable of solving complex academic tasks, including multiple-choice examination questions, which has led to concerns about academic integrity and the potential misuse of AI during unsupervised and supervised assessments. This can be seen in the "Generative AI use and misuse call for assessment reform in higher education"\supercite{chirikov2026genai} article published in Science. According to this article 9\% of undergrad students admit to using AI to cheat. At the same time, locally deployable models have become widely accessible, making it possible for students to run powerful AI systems directly on their personal computers without relying on cloud-based services. Understanding the capabilities and limitations of such models is therefore becoming increasingly relevant for both educators and students.
 
-Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma-4-E2B on multiple-choice examination sets from the DTU course Introduction to Machine Learning and Data Mining (02450, 02452). Specifically, the study tests whether the model answers fewer questions correctly when a figure or table is shown as an image than when the same information is given as text. This addresses the multimodal evaluation gap described in Section~3.3 (p.~14) of "Sociotechnical Safety Evaluation of Generative AI Systems"\supercite{weidinger2023sociotechnical}. This is done to show the strengths and weaknesses of a locally run open-source model like Gemma, and to find out which kinds of questions are more AI-resistant: those given as text, or those that rely on figures and tables.
+Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma-4-E2B on multiple-choice examination sets from the DTU course Introduction to Machine Learning and Data Mining (02450, 02452). Specifically, the study tests whether the model answers fewer questions correctly when a figure or table is shown as an image than when the same information is given as text. This addresses the multimodal evaluation gap described in Section~3.3 (p.~14) of "Sociotechnical Safety Evaluation of Generative AI Systems"\supercite{weidinger2023sociotechnical}. This is done to show the strengths and weaknesses of a locally run open-source model like Gemma, and to find out which kinds of questions are more AI-resistant: those given as text, or those that rely on figures and tables. The research question for this study is therefore: Does Gemma-4-E2B do better on questions presented as an image or questions presented as text?
 
 To evaluate the model, Gemma was tested on 16 publicly available examination sets spanning the years 2017–2025. A central objective of the study was to compare Gemma's performance on image-based and text-based prompts. For questions containing visualizations, such as tables and matrices, the model was evaluated under two separate conditions. In the first condition, Gemma received a screenshot of the visualization together with the original question text. In the second condition, the visualization was replaced by a detailed textual description generated using Anthropics Fable 5 model, while the original question text remained unchanged. This experimental setup allowed for a direct comparison of the model's ability to interpret graphical information versus equivalent textual descriptions.
 
@@ -597,19 +585,6 @@ Two additional points should be noted. First, the power of the contamination ana
 
 Second, although each question was presented to Gemma in a fresh session, questions within the same exam are not fully independent. Exams that are unusually difficult or easy will tend to shift the performance of all associated questions in the same direction. While this does not affect the McNemar test, it may introduce some distortion in the binomial and two-proportion z-tests due to mild violations of the independence assumption.
 
-
-\subsection{Implications for exam design}
-The introduction to this paper cited a study estimating that 9\% of undergraduate students use AI to cheat\supercite{chirikov2026genai}. The results presented here suggest that this risk is not uniform across question types. A multiple-choice exam composed entirely of text-based questions may be solvable by models small enough to run on a student laptop. In contrast, exams that rely heavily on figures and tables presented as images are substantially more difficult for the same models to solve consistently.
-
-This does not require changing what an exam tests. The machine learning content 
-can stay the same; what changes is whether the information is handed to the model 
-as text or whether it has to be read off an image. For questions involving 
-correlation matrices, confusion matrices, or any other numerical data, showing the 
-image rather than typing out the values appears to be enough to push a locally 
-run open model below the passing threshold.
-
-One thing worth highlighting is that this only holds for smaller models. Someone using a bigger cloud-based model might still nail the figure questions, and as open-source vision models keep getting better, that gap will probably shrink. What doesn't work today might work in a year or two. This is really just a snapshot of where small open models happen to be right now, not some permanent law about AI and visual information.
-
 \section{Conclusion}
 
 Gemma-4-E2B performs noticeably worse on unpaired image exam questions and on paired exam questions presented as screenshots compared to the corresponding text-based modalities. This is reflected in the lower accuracy on screenshot-based prompts, as evidenced by both the two-proportion z-test for unpaired text versus unpaired image questions and the McNemar test for the paired modalities. The weakness does not appear to stem from the model's understanding of machine learning itself but rather from the modality through which the information is presented. In particular, Gemma exhibits lower performance when information must be extracted from images than when it is provided as plain text. Although the observed limitation is specific to the Gemma-4-E2B model examined in this study, larger Gemma models, which require more powerful hardware, may possess stronger image-processing capabilities and therefore may not exhibit the same weaknesses. This distinction is important when evaluating the capabilities of AI models and their implications for academic integrity.
@@ -627,6 +602,50 @@ For university exam designers and instructors, these findings have practical imp
 \printbibliography[]
 
 \vfill % Pushes the declaration to the bottom of the page if there is space
+
+
+\section*{Author contributions}
+{\small\noindent
+\textbf{Rune Christensen} (s250910): 
+\begin{itemize}
+    \item Contributed to section 1 (Introduction)
+    \item Lead contributor to Section 2.1 (The dataset)
+    \item Lead contributor to Section 2.4.2 (McNemar's test)
+    \item contributed to Section 2.4.4 (Two-proportion z-test)
+    \item Lead contributor to Section 3.2 (McNemar's test)
+    \item contributed to Section 3.3 (Binomial tests)
+    \item Contributed to Section 4.2 (Limitations)
+    \item Contributed to Section 4.3 (Implications for exam design)
+    \item Lead contributor to Section~5 (Conclusion)
+\end{itemize}
+\\
+\textbf{Anas Alkaisi} (s255797):
+\begin{itemize}
+    \item Lead contributor Abstract
+    \item Lead contributor Section~2.2.1 (Prompting Strategy)
+    \item Lead contributor Section~2.3 (The Model)
+    \item Contributed to Section~4.1 (Interpretation of the results)
+    \item Contributed to section~4.2 (Limitations)
+    \item Contributed to Section~5 (Conclusion)
+\end{itemize}
+    \\
+\textbf{Frederik Naervig Gerlach-Hansen} (s256931): \begin{itemize}
+    \item Contributed to Section 1 (Introduction)
+    \item Contributed to Section 2.1 (The Dataset) 
+    \item Contributed to Section 2.2.1 (Prompting Strategy)
+    \item Contributed to Section 2.3 (The Model)
+    \item Lead contributor to Section 2.4.1 (Confidence Intervals)
+    \item Lead contributor to Section 2.4.3 (Binomial tests)
+    \item Lead contributor to Section 2.4.4 (Two-proportion z-test)
+    \item Lead contributor to Section 2.4.5 (Power)
+    \item Lead contributor to Section 3.1 (Summary of the data)
+    \item Lead contributor to Section 3.3 (Binomial tests)
+    \item Lead contributor to Section 3.4 (Two-proportion z-tests)
+    
+\end{itemize}}
+\newline
+\textbf{Github link:} https://github.com/frederikngh/02445-gemma-evaluation
+
 
 \section*{Declaration of AI use}
 
