@@ -104,7 +104,7 @@ to diminish as open-source vision capabilities continue to improve.
 \newpage
 
 \section{Introduction}
-The rapid advancement of generative artificial intelligence has raised important questions regarding its impact on education and assessment. Modern AI systems are increasingly capable of solving complex academic tasks, including multiple-choice examination questions, which has led to concerns about academic integrity and the potential misuse of AI during unsupervised and supervised assessments. This can be seen in the "Generative AI use and misuse call for assessment reform in higher education"\supercite{chirikov2026genai} article published in Science. According to this article 9\% of undergrad students admit to using AI to cheat. At the same time, locally deployable models have become widely accessible, making it possible for students to run powerful AI systems directly on their personal computers without relying on cloud-based services. Understanding the capabilities and limitations of such models is therefore becoming increasingly relevant for both educators and students.
+The rapid advancement of generative artificial intelligence has raised important questions regarding its impact on education and assessment. Modern AI systems are increasingly capable of solving complex academic tasks, including multiple-choice examination questions, which has led to concerns about academic integrity and the potential misuse of AI during unsupervised and supervised assessments. This can be seen in the "Generative AI use and misuse call for assessment reform in higher education"\supercite{chirikov2026genai} article published in Science. This article estimates that 9\% of undergrad students use AI to cheat. At the same time, locally deployable models have become widely accessible, making it possible for students to run powerful AI systems directly on their personal computers without relying on cloud-based services. Understanding the capabilities and limitations of such models is therefore becoming increasingly relevant for both educators and students.
 
 Motivated by these developments, this report investigates the performance of the locally deployable AI model Gemma-4-E2B on multiple-choice examination sets from the DTU course Introduction to Machine Learning and Data Mining (02450, 02452). Specifically, the study tests whether the model answers fewer questions correctly when a figure or table is shown as an image than when the same information is given as text. This addresses the multimodal evaluation gap described in Section~3.3 (p.~14) of "Sociotechnical Safety Evaluation of Generative AI Systems"\supercite{weidinger2023sociotechnical}. This is done to show the strengths and weaknesses of a locally run open-source model like Gemma, and to find out which kinds of questions are more AI-resistant: those given as text, or those that rely on figures and tables. The research question for this study is therefore: Does Gemma-4-E2B do better on questions presented as an image or questions presented as text?
 
@@ -262,6 +262,8 @@ A $p$-value less than our significance level $\alpha$ indicates that the observe
 
 This test was computed in Python using the \texttt{mcnemar} function from \texttt{statsmodels}, with \texttt{exact=False} and \texttt{correction=False} selecting the chi-squared approximation without continuity correction.
 
+The McNemar test is used as the primary result in this study. This is because, unlike the z-test and binomial tests, McNemar doesn't suffer from the contamination problem and the question difficulty problem. The question difficulty problem being that image questions might just be harder than text questions. McNemar only looks at when one modality is better than the other, for each paired question, and doesn't look at the overall accuracy of each modality. This makes McNemar immune to the problem of the other tests, and makes it clear why it was chosen as the primary result.
+
 \subsubsection{Binomial tests}
 
 This study considers six different estimated proportions. The first four correspond to the four individual input modalities, while the last two correspond to full-exam simulations that combine multiple input modalities . For each estimated proportion, two one-sided binomial hypothesis tests were conducted, resulting in 12 binomial tests overall. The first test assessed whether Gemma's accuracy exceeded the 25\% baseline expected under random guessing for a four-option multiple-choice exam, whereas the second assessed whether Gemma achieved a passing score by testing whether its accuracy exceeded the 50\% pass threshold.\newline
@@ -290,10 +292,10 @@ This is the significance level we will compare our p-values to in the results se
 
 A possible problem might occur in that some of the binomial tests are dependent. If the accuracy for an input modality is high, the full exam simulation will also be high. This could be a problem since, according to the Day 2 slides\supercite{das2026day2}, Bonferroni assumes that the tests are independent. This independence is only needed if you want the family-wise error rate (FWER) to be roughly equal to $\alpha$, so $FWER \approx \alpha$. Since our binomial tests are not fully independent, FWER won't be roughly equal to $\alpha$. This means that we do not know our exact FWER. But since the FWER is the probability of getting one or more Type 1 errors, and dependence makes the Type 1 errors come in groups, so that either many happen at once or none happen, the FWER goes down as the positive dependence goes up. In other words, when the tests are positively dependent there are more scenarios where no Type 1 error happens than when they are independent. Applying Bonferroni therefore keeps $FWER \le \alpha$, so the true FWER becomes a bit lower than alpha, meaning that the probability of making a Type 1 error decreases. 
 
-In this study a Type 1 error is worse than a Type 2 error. A Type 1 error would mean telling the course staff that figure and table questions are much more resistant to the model than they really are. This would give them a false sense of security and make them trust an exam format that does not actually stop students from using AI. A Type 2 error would only mean failing to spot a real difference between the modalities, therefore advising the staff to leave the exam sets as they are. Acting on a Type 1 error would therefore mean asking the Machine learning staff to change the entire exam format, when it shouldn't be changed. A Type 2 error would tell the Machine learning staff to leave the exam sets as they are. A Type 1 error is way more work and has bigger consequences for the Machine learning staff. It is clear why this study would rather make Type 2 errors than Type 1 errors.
-\newline
+In this study a Type 1 error is worse than a Type 2 error. A Type 1 error would mean concluding that Gemma beats one of the baselines, when it didn't. This would force them to change the entire exam format based on false information. A Type 2 error would only mean failing to spot a real difference between the modalities, therefore advising the staff to leave the exam sets as they are. A Type 1 error is more work and has bigger consequences for the Machine learning staff. It is clear why this study would rather make Type 2 errors than Type 1 errors. So the dependence between the binomial tests lowers the true FWER, which then lowers the probability of making a type 1 error, which is acceptable for this study.
+\newline\newline
 The Day 2 slides also present the false discovery rate (FDR) procedure of Benjamini and Hochberg as an alternative to Bonferroni that has more power\supercite{das2026day2}. We still chose Bonferroni, since FDR gains its power by allowing a few Type 1 errors, and as explained above a Type 1 error is worse for us than a Type 2 error.
-\newline
+\newline\newline
 These tests were computed in Python using the \texttt{binomtest} function from \texttt{scipy}, with \texttt{alternative='greater'} for the one-sided tests.
 
 \subsubsection{Two-proportion z-test}
@@ -576,7 +578,7 @@ A potential limitation of this study is the comparison between the unpaired text
 
 The paired analysis using McNemar's test mitigates this issue by comparing the same underlying information presented in two different modalities. However, the paired data only include tables, matrices, and other visual elements that can be faithfully converted into text. More complex visualizations, such as scatter plots, dendrograms, and ROC curves, appear only in the unpaired dataset. Therefore, the paired results should be interpreted as evidence regarding the reading of tables and similar structures from images, rather than figures in general.
 
-Another limitation is that the text descriptions used in the paired-text condition were generated by another AI model (Claude) rather than written manually. Although these descriptions provide a practical approximation of how the same visual information could be presented in text form, the conversion from image to text is inherently interpretive. A well-crafted description may emphasize relevant values or relationships and thereby make the question easier to answer, not merely easier to read. Consequently, Gemma's higher accuracy on the paired-text questions may partly reflect the quality and structure of the descriptions rather than a pure advantage of text over images. 
+Another limitation is that the text descriptions used in the paired-text condition were generated by another AI model (Fable 5) rather than written manually. Although these descriptions provide a practical approximation of how the same visual information could be presented in text form, the conversion from image to text is inherently interpretive. A well-crafted description may emphasize relevant values or relationships and thereby make the question easier to answer, not merely easier to read. Consequently, Gemma's higher accuracy on the paired-text questions may partly reflect the quality and structure of the descriptions rather than a pure advantage of text over images. 
 
 Another constraint of this study is that it only evaluates a single model, at a single parameter size, on questions from one course. Larger versions of Gemma, or more capable cloud-based models with stronger vision components, may perform differently on image-based questions. Consequently, the performance gap observed in this study should not be interpreted as representative of AI systems in general. Rather, the results provide evidence of a limitation in the specific class of small, locally-run multimodal models considered here.
 
@@ -597,7 +599,7 @@ For university exam designers and instructors, these findings have practical imp
 
 
 
-
+\newpage
 
 \printbibliography[]
 
@@ -646,7 +648,7 @@ For university exam designers and instructors, these findings have practical imp
 \newline
 \textbf{Github link:} https://github.com/frederikngh/02445-gemma-evaluation
 
-
+\newpage
 \section*{Declaration of AI use}
 
 % Instructions
@@ -739,10 +741,10 @@ Write LaTeX commands
 
 % \onecolumn % Commented out to prevent accidental page breaks. Delete the '%' if you explicitly need a column reset here.
 }
-
+\newpage
 \section*{Appendix}
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \begin{minipage}[c]{0.48\linewidth}
         \centering
@@ -760,7 +762,7 @@ Write LaTeX commands
 
 
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \fbox{\includegraphics[width=0.86\linewidth]{images/q25_exam_question_compact.png}}
 
